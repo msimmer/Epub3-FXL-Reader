@@ -2,16 +2,14 @@ window.Reader ?= {}
 class window.Reader.App
   constructor: (options)->
 
-    console.log 'Main'
-
-
     defaults =
       contentUrl:null
       spread:true
-      zoom:1
-      viewport:null
-      resize:false
-      container:'#LB-Buch-Content-Def-1'
+      viewport:
+        width:468
+        height:680
+      container:'main'
+      lazy:false
       origin:
         x:0
         y:0
@@ -20,11 +18,26 @@ class window.Reader.App
     settings = $.extend({}, defaults, options)
 
 
+    @isResizing = false
+
     @utils  = new window.Reader.Utils
     @parse  = new window.Reader.Parse
-    @layout = new window.Reader.Layout
     @aspect = new window.Reader.Aspect(settings)
+    @layout = new window.Reader.Layout(settings)
     @http   = new window.Reader.Http
+
+
+    # get content.opf
+    # extract spine from opf
+    # get each page (options.lazy limit to n pages)
+    # add pages to dom
+    # layout pages for spreads
+    # resize everything
+    # init page turns
+
+    @layout.render()
+
+
 
     $ =>
 
@@ -33,7 +46,7 @@ class window.Reader.App
       # TODO: move to `reader.ready` event
       #
 
-      @aspect.getViewportValues()
+      # @aspect.getViewportValues()
       @aspect.setZoom()
 
 
@@ -42,9 +55,9 @@ class window.Reader.App
 
       $(window).on
         'resize': =>
-          @settings.resize = true
+          @isResizing = true
           @utils.waitForFinalEvent (=>
-            @settings.resize = false
+            @isResizing = false
             @aspect.setZoom()
             return
           ), 500, 'some unique string'

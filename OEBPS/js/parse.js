@@ -5,9 +5,7 @@
   }
 
   window.Reader.Parse = (function() {
-    function Parse() {
-      console.log('Parse');
-    }
+    function Parse() {}
 
     Parse.prototype.xmlToJson = function(xml) {
       var attribute, i, item, j, nodeName, obj, old;
@@ -31,23 +29,19 @@
           item = xml.childNodes.item(i);
           nodeName = item.nodeName;
           if (typeof obj[nodeName] === 'undefined') {
-            obj[nodeName] = xmlToJson(item);
+            obj[nodeName] = this.xmlToJson(item);
           } else {
             if (typeof obj[nodeName].push === 'undefined') {
               old = obj[nodeName];
               obj[nodeName] = [];
               obj[nodeName].push(old);
             }
-            obj[nodeName].push(xmlToJson(item));
+            obj[nodeName].push(this.xmlToJson(item));
           }
           i++;
         }
       }
       return obj;
-    };
-
-    Parse.prototype.extract = function(prop, obj) {
-      return prop[obj];
     };
 
     Parse.prototype.render = function(file, type) {

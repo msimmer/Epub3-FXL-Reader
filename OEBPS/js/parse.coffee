@@ -1,7 +1,6 @@
 window.Reader ?= {}
 class window.Reader.Parse
   constructor: ->
-    console.log 'Parse'
 
   # http://davidwalsh.name/convert-xml-json
   xmlToJson: (xml) ->
@@ -27,20 +26,15 @@ class window.Reader.Parse
         item = xml.childNodes.item(i)
         nodeName = item.nodeName
         if typeof obj[nodeName] == 'undefined'
-          obj[nodeName] = xmlToJson(item)
+          obj[nodeName] = @xmlToJson(item)
         else
           if typeof obj[nodeName].push == 'undefined'
             old = obj[nodeName]
             obj[nodeName] = []
             obj[nodeName].push old
-          obj[nodeName].push xmlToJson(item)
+          obj[nodeName].push @xmlToJson(item)
         i++
     obj
-
-
-  extract: (prop, obj) ->
-    return prop[obj]
-
 
   render: (file, type) ->
     switch type

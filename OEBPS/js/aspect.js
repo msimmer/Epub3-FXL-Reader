@@ -57,7 +57,7 @@
       };
     };
 
-    Aspect.prototype.adjustContentTo = function(scale) {
+    Aspect.prototype.adjustMainContentTo = function(scale) {
       var CSSproperties, i, len, props, scaleCSS, str;
       scaleCSS = {};
       CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + this.settings.origin.x + " " + this.settings.origin.y];
@@ -69,13 +69,15 @@
       return $(this.settings.container).css(scaleCSS);
     };
 
+    Aspect.prototype.adjustSectionContentTo = function(maxPageWidth) {};
+
     Aspect.prototype.setZoom = function() {
       var fit, fitX, fitY, multiplier;
       multiplier = this.calcScale();
       fitX = this.originalX() * multiplier.x;
       fitY = this.originalY() * multiplier.y;
       fit = fitY < fitX ? multiplier.y : multiplier.x;
-      return this.adjustContentTo(fit);
+      return this.adjustMainContentTo(fit);
     };
 
     return Aspect;

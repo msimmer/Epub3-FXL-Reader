@@ -1,7 +1,6 @@
 window.Reader ?= {}
 class window.Reader.Utils
   constructor: ->
-    console.log 'Utils'
 
   # http://davidwalsh.name/vendor-prefix
   prefix: do ->

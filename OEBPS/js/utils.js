@@ -5,9 +5,7 @@
   }
 
   window.Reader.Utils = (function() {
-    function Utils() {
-      console.log('Utils');
-    }
+    function Utils() {}
 
     Utils.prototype.prefix = (function() {
       var dom, pre, styles;

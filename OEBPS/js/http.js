@@ -5,20 +5,48 @@
   }
 
   window.Reader.Http = (function() {
-    function Http(settings) {
-      console.log('Http');
-    }
+    function Http(settings) {}
 
-    Http.prototype.getHTML = function(url, cb) {
-      return $.get(url, function() {
-        return cb();
+    Http.prototype.get = function(url, dataType, cb) {
+      return $.ajax({
+        url: url,
+        dataType: dataType,
+        type: 'get',
+        success: function(data) {
+          if (cb && typeof cb === 'function') {
+            return cb(data);
+          }
+          return data;
+        },
+        error: function(xhr) {
+          return console.error(xhr.status + ": " + xhr.statusText);
+        }
       });
     };
 
-    Http.prototype.getXML = function(url, cb) {
-      return $.get(url, function() {
-        return cb();
-      });
+    Http.prototype.getSpine = function(data) {
+      var content, entry, i, index, item, j, len, len1, manifest, manifestObj, readerSpine, spine;
+      manifestObj = {};
+      readerSpine = {};
+      content = Reader.Parse.prototype.render(data, 'xml')["package"];
+      manifest = content.manifest.item;
+      spine = content.spine.itemref;
+      for (i = 0, len = manifest.length; i < len; i++) {
+        item = manifest[i];
+        if (item['@attributes']['media-type'] === 'application/xhtml+xml') {
+          manifestObj[item['@attributes'].id] = item['@attributes'].href;
+        }
+      }
+      for (index = j = 0, len1 = spine.length; j < len1; index = ++j) {
+        entry = spine[index];
+        readerSpine[index] = {
+          idref: entry['@attributes'].idref,
+          properties: entry['@attributes'].properties,
+          properties: entry['@attributes'].properties,
+          href: manifestObj[entry['@attributes'].idref]
+        };
+      }
+      return readerSpine;
     };
 
     return Http;

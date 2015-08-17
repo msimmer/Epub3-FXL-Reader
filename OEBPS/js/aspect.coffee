@@ -41,19 +41,21 @@ class window.Reader.Aspect
     y:@windowY() / @originalY()
 
 
-  adjustContentTo: (scale) ->
+  adjustMainContentTo: (scale) ->
     scaleCSS = {}
     CSSproperties = [
       "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
       "#{Reader.Utils::prefix.css}transform-origin:#{@settings.origin.x} #{@settings.origin.y}"
     ]
 
-
     for str in CSSproperties
       props = str.split(':')
       scaleCSS[props[0]] = props[1]
 
     $(@settings.container).css(scaleCSS)
+
+  adjustSectionContentTo:(maxPageWidth) ->
+    #
 
 
   setZoom: ->
@@ -62,5 +64,5 @@ class window.Reader.Aspect
     fitY = @originalY() * multiplier.y
     fit = if fitY < fitX then multiplier.y else multiplier.x
 
-    @adjustContentTo(fit)
+    @adjustMainContentTo(fit)
 

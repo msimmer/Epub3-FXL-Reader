@@ -7,34 +7,36 @@
   window.Reader.App = (function() {
     function App(options) {
       var defaults, settings;
-      console.log('Main');
       defaults = {
         contentUrl: null,
         spread: true,
-        zoom: 1,
-        viewport: null,
-        resize: false,
-        container: '#LB-Buch-Content-Def-1',
+        viewport: {
+          width: 468,
+          height: 680
+        },
+        container: 'main',
+        lazy: false,
         origin: {
           x: 0,
           y: 0
         }
       };
       settings = $.extend({}, defaults, options);
+      this.isResizing = false;
       this.utils = new window.Reader.Utils;
       this.parse = new window.Reader.Parse;
-      this.layout = new window.Reader.Layout;
       this.aspect = new window.Reader.Aspect(settings);
+      this.layout = new window.Reader.Layout(settings);
       this.http = new window.Reader.Http;
+      this.layout.render();
       $((function(_this) {
         return function() {
-          _this.aspect.getViewportValues();
           _this.aspect.setZoom();
           return $(window).on({
             'resize': function() {
-              _this.settings.resize = true;
+              _this.isResizing = true;
               return _this.utils.waitForFinalEvent((function() {
-                _this.settings.resize = false;
+                _this.isResizing = false;
                 _this.aspect.setZoom();
               }), 500, 'some unique string');
             }
