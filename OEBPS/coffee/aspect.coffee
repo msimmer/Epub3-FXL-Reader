@@ -41,12 +41,6 @@ class Aspect
 
 
   adjustMainContentTo: (scale, cb) ->
-
-<<<<<<< HEAD:OEBPS/coffee/aspect.coffee
-=======
-    console.log 'adjustMainContentTo'
-
->>>>>>> dd854c4ee057fb2546a520b2d238d7e786243655:OEBPS/coffee/aspect.coffee
     scaleCSS = {}
     CSSproperties = [
       "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
@@ -58,13 +52,6 @@ class Aspect
       scaleCSS[props[0]] = props[1]
 
     $(@settings.container).css(scaleCSS)
-<<<<<<< HEAD:OEBPS/coffee/aspect.coffee
-=======
-
-    if cb then cb()
-
-
->>>>>>> dd854c4ee057fb2546a520b2d238d7e786243655:OEBPS/coffee/aspect.coffee
 
     if cb then cb()
 
