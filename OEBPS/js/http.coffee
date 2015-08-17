@@ -1,9 +1,16 @@
-class Http
-  constructor: (@settings, @utils) ->
+window.Reader ?= {}
+class window.Reader.Http
+  constructor: (settings) ->
     console.log 'Http'
 
 
-if typeof module != "undefined" && module.exports
-  exports.Http = Http
-else
-  window.Http = Http
+  getHTML: (url, cb) ->
+    return $.get(url, -> cb())
+
+  getXML: (url, cb) ->
+    return $.get(url, -> cb())
+
+
+
+
+

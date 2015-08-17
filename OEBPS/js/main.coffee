@@ -1,10 +1,12 @@
-class Reader
-  constructor: (@utils, @aspect, @http)->
+window.Reader ?= {}
+class window.Reader.App
+  constructor: (options)->
 
     console.log 'Main'
 
 
-    @settings =
+    defaults =
+      contentUrl:null
       spread:true
       zoom:1
       viewport:null
@@ -15,9 +17,14 @@ class Reader
         y:0
 
 
-    @utils  = new Utils
-    @aspect = new Aspect(@settings, @utils)
-    @http   = new Http(@settings, @utils)
+    settings = $.extend({}, defaults, options)
+
+
+    @utils  = new window.Reader.Utils
+    @parse  = new window.Reader.Parse
+    @layout = new window.Reader.Layout
+    @aspect = new window.Reader.Aspect(settings)
+    @http   = new window.Reader.Http
 
     $ =>
 
@@ -42,16 +49,5 @@ class Reader
             return
           ), 500, 'some unique string'
 
-
-
-
-
-
-
-
-if typeof module != "undefined" && module.exports
-  exports.Reader = Reader
-else
-  window.Reader = Reader
 
 

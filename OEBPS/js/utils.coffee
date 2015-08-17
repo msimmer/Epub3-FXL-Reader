@@ -1,5 +1,6 @@
-class Utils
-  constructor: (settings) ->
+window.Reader ?= {}
+class window.Reader.Utils
+  constructor: ->
     console.log 'Utils'
 
   # http://davidwalsh.name/vendor-prefix
@@ -28,9 +29,3 @@ class Utils
         clearTimeout timers[uniqueId]
       timers[uniqueId] = setTimeout(callback, ms)
       return
-
-
-if typeof module != "undefined" && module.exports
-  exports.Utils = Utils
-else
-  window.Utils = Utils

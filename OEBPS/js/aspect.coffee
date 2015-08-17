@@ -1,6 +1,6 @@
-class Aspect
-  constructor: (@settings, @utils) ->
-    console.log 'Aspect'
+window.Reader ?= {}
+class window.Reader.Aspect
+  constructor: (@settings) ->
 
   sanitizeValues: (val) ->
     switch typeof val
@@ -12,7 +12,7 @@ class Aspect
     return val
 
 
-  getViewportValues: =>
+  getViewportValues: ->
     obj = {}
     arr = $('meta[name=viewport]').attr('content').split(',')
     arr.map (val) =>
@@ -44,8 +44,8 @@ class Aspect
   adjustContentTo: (scale) ->
     scaleCSS = {}
     CSSproperties = [
-      "#{@utils.prefix.css}transform:scale(#{scale})"
-      "#{@utils.prefix.css}transform-origin:#{@settings.origin.x} #{@settings.origin.y}"
+      "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
+      "#{Reader.Utils::prefix.css}transform-origin:#{@settings.origin.x} #{@settings.origin.y}"
     ]
 
 
@@ -64,8 +64,3 @@ class Aspect
 
     @adjustContentTo(fit)
 
-
-if typeof module != "undefined" && module.exports
-  exports.Aspect = Aspect
-else
-  window.Aspect = Aspect
