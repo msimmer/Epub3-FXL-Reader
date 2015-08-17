@@ -27,21 +27,26 @@
             results.push(Reader.Http.prototype.get(v.href, 'html', function(section) {
               switch (sectionPos) {
                 case 'left':
-                  console.log('append page left');
                   $spread = $('<article/>', {
                     'class': 'spread',
                     'data-idx': spreadCount
-                  }).append(section);
+                  }).append($('<section/>', {
+                    html: section
+                  }));
                   break;
                 case 'right':
-                  console.log('append page right');
                   if ($spread) {
-                    $spread.append(section);
+                    $spread.append($('<section/>', {
+                      html: section
+                    }));
                   } else {
+                    console.warn("Appending a right-hand section at position " + spreadCount + " to an empty article.");
                     $spread = $('<article/>', {
                       'class': 'spread',
                       'data-idx': spreadCount
-                    }).append(section);
+                    }).append($('<section/>', {
+                      html: section
+                    }));
                   }
               }
               $(_this.settings.container).append($spread);

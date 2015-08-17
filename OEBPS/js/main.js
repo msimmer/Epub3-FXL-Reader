@@ -10,6 +10,7 @@
       defaults = {
         contentUrl: null,
         spread: true,
+        gutter: 0,
         viewport: {
           width: 468,
           height: 680
@@ -28,10 +29,14 @@
       this.aspect = new window.Reader.Aspect(settings);
       this.layout = new window.Reader.Layout(settings);
       this.http = new window.Reader.Http;
-      this.layout.render();
       $((function(_this) {
         return function() {
-          _this.aspect.setZoom();
+          $.when(_this.layout.render()).then(function() {
+            return $(document).trigger('reader.loaded');
+          });
+          $(document).on('reader.loaded', function() {
+            return _this.aspect.setZoom();
+          });
           return $(window).on({
             'resize': function() {
               _this.isResizing = true;

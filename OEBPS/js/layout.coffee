@@ -16,19 +16,19 @@ class window.Reader.Layout
         Reader.Http::get(v.href, 'html', (section) =>
           switch sectionPos
             when 'left'
-              console.log 'append page left'
               $spread = $('<article/>',
                 'class':'spread'
                 'data-idx':spreadCount
-              ).append(section)
+              ).append($('<section/>', html: section))
             when 'right'
-              console.log 'append page right'
-              if $spread then $spread.append(section)
+              if $spread then $spread.append($('<section/>', html: section))
               else
+                console.warn("Appending a right-hand section at position
+                  #{spreadCount} to an empty article.")
                 $spread = $('<article/>',
                   'class':'spread'
                   'data-idx':spreadCount
-                ).append(section)
+                ).append($('<section/>', html: section))
 
           $(@settings.container).append($spread)
 

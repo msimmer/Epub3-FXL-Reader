@@ -5,6 +5,7 @@ class window.Reader.App
     defaults =
       contentUrl:null
       spread:true
+      gutter:0
       viewport:
         width:468
         height:680
@@ -35,23 +36,23 @@ class window.Reader.App
     # resize everything
     # init page turns
 
-    @layout.render()
+
 
 
 
     $ =>
 
-      # DOM Ready
-      #
-      # TODO: move to `reader.ready` event
-      #
-
-      # @aspect.getViewportValues()
-      @aspect.setZoom()
+      $.when(@layout.render())
+      .then () =>
+        $(document).trigger('reader.loaded')
 
 
       # DOM Events
       #
+
+      $(document).on('reader.loaded', =>
+        @aspect.setZoom()
+      )
 
       $(window).on
         'resize': =>

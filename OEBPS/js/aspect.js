@@ -57,27 +57,44 @@
       };
     };
 
-    Aspect.prototype.adjustMainContentTo = function(scale) {
-      var CSSproperties, i, len, props, scaleCSS, str;
+    Aspect.prototype.adjustMainContentTo = function(scale, cb) {
+      var CSSproperties, j, len, props, scaleCSS, str;
       scaleCSS = {};
       CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + this.settings.origin.x + " " + this.settings.origin.y];
-      for (i = 0, len = CSSproperties.length; i < len; i++) {
-        str = CSSproperties[i];
+      for (j = 0, len = CSSproperties.length; j < len; j++) {
+        str = CSSproperties[j];
         props = str.split(':');
         scaleCSS[props[0]] = props[1];
       }
-      return $(this.settings.container).css(scaleCSS);
+      $(this.settings.container).css(scaleCSS);
+      if (cb && typeof cb === 'function') {
+        return cb();
+      }
     };
 
-    Aspect.prototype.adjustSectionContentTo = function(maxPageWidth) {};
+    Aspect.prototype.adjustArticlePosition = function(sectionWidth) {
+      return $('section').each(function(i) {
+        var obj1, sectionPos;
+        sectionPos = (
+          obj1 = {},
+          obj1[Reader.Utils.prototype.prefix.css + "transform"] = "translateX(" + (i * sectionWidth) + "px)",
+          obj1
+        );
+        return $(this).css(sectionPos);
+      });
+    };
 
-    Aspect.prototype.setZoom = function() {
+    Aspect.prototype.setZoom = function(cb) {
       var fit, fitX, fitY, multiplier;
       multiplier = this.calcScale();
       fitX = this.originalX() * multiplier.x;
       fitY = this.originalY() * multiplier.y;
       fit = fitY < fitX ? multiplier.y : multiplier.x;
-      return this.adjustMainContentTo(fit);
+      return this.adjustMainContentTo(fit, (function(_this) {
+        return function() {
+          return _this.adjustArticlePosition(_this.originalX() * _this.calcScale().x);
+        };
+      })(this));
     };
 
     return Aspect;

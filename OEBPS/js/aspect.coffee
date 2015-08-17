@@ -41,7 +41,7 @@ class window.Reader.Aspect
     y:@windowY() / @originalY()
 
 
-  adjustMainContentTo: (scale) ->
+  adjustMainContentTo: (scale, cb) ->
     scaleCSS = {}
     CSSproperties = [
       "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
@@ -53,16 +53,31 @@ class window.Reader.Aspect
       scaleCSS[props[0]] = props[1]
 
     $(@settings.container).css(scaleCSS)
-
-  adjustSectionContentTo:(maxPageWidth) ->
-    #
+    if cb and typeof cb is 'function' then cb()
 
 
-  setZoom: ->
+  # getMaxSectionDimensions: ->
+  #   multiplier = @calcScale()
+  #   pos =
+  #     w:@originalX() * multiplier.x
+  #     h:@originalY() * multiplier.y
+  #   return pos
+
+
+  adjustArticlePosition:(sectionWidth) ->
+    $('section').each( (i) ->
+      sectionPos =
+        "#{Reader.Utils::prefix.css}transform":"translateX(#{i*sectionWidth}px)"
+      $(@).css(sectionPos)
+    )
+
+
+  setZoom: (cb) ->
     multiplier = @calcScale()
     fitX = @originalX() * multiplier.x
     fitY = @originalY() * multiplier.y
     fit = if fitY < fitX then multiplier.y else multiplier.x
 
-    @adjustMainContentTo(fit)
-
+    @adjustMainContentTo(fit, () =>
+      @adjustArticlePosition(@originalX() * @calcScale().x)
+    )
