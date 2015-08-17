@@ -1,6 +1,5 @@
-window.Reader ?= {}
-class window.Reader.Http
-  constructor: (settings) ->
+class Http
+  constructor: ->
 
   get: (url, dataType, cb) ->
     return $.ajax(
@@ -16,9 +15,10 @@ class window.Reader.Http
     )
 
   getSpine: (data) ->
+
     manifestObj = {}
     readerSpine = {}
-    content     = Reader.Parse::render(data, 'xml').package
+    content     = window.Reader.Parser::render(data, 'xml').package
     manifest    = content.manifest.item
     spine       = content.spine.itemref
 
@@ -36,3 +36,7 @@ class window.Reader.Http
 
 
     return readerSpine
+
+
+window.Reader ?= {}
+window.Reader.Http = Http

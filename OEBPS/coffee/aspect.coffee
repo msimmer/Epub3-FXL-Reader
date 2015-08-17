@@ -1,8 +1,7 @@
-window.Reader ?= {}
-class window.Reader.Aspect
+class Aspect
   constructor: (@settings) ->
 
-  sanitizeValues: (val) ->
+  @sanitizeValues: (val) ->
     switch typeof val
       when 'string'
         val = if val.match(/\d/g)
@@ -42,6 +41,9 @@ class window.Reader.Aspect
 
 
   adjustMainContentTo: (scale, cb) ->
+
+    console.log 'adjustMainContentTo'
+
     scaleCSS = {}
     CSSproperties = [
       "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
@@ -53,7 +55,10 @@ class window.Reader.Aspect
       scaleCSS[props[0]] = props[1]
 
     $(@settings.container).css(scaleCSS)
-    if cb and typeof cb is 'function' then cb()
+
+    if cb then cb()
+
+
 
 
   # getMaxSectionDimensions: ->
@@ -64,12 +69,14 @@ class window.Reader.Aspect
   #   return pos
 
 
-  adjustArticlePosition:(sectionWidth) ->
+  adjustArticlePosition:() ->
+    sectionWidth = @originalX() * @calcScale().x
     $('section').each( (i) ->
       sectionPos =
         "#{Reader.Utils::prefix.css}transform":"translateX(#{i*sectionWidth}px)"
       $(@).css(sectionPos)
     )
+    $(document).trigger('reader.articlesPositioned')
 
 
   setZoom: (cb) ->
@@ -78,6 +85,11 @@ class window.Reader.Aspect
     fitY = @originalY() * multiplier.y
     fit = if fitY < fitX then multiplier.y else multiplier.x
 
-    @adjustMainContentTo(fit, () =>
-      @adjustArticlePosition(@originalX() * @calcScale().x)
+    @adjustMainContentTo(fit, ->
+      $(document).trigger('reader.pagesFit')
+      if cb then cb()
     )
+
+
+window.Reader ?= {}
+window.Reader.Aspect = Aspect
