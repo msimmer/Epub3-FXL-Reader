@@ -4,7 +4,11 @@ class App
     defaults =
       contentUrl:null
       spread:true
+<<<<<<< HEAD
       gutter:15
+=======
+      gutter:0
+>>>>>>> dd854c4ee057fb2546a520b2d238d7e786243655
       viewport:
         width:468
         height:680
