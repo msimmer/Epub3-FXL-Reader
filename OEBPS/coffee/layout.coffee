@@ -51,7 +51,7 @@ class Layout
       return true
 
 
-  updatePageCollection:(k, len, section) ->
+  updatePageCollection:(k, len, section, layoutProps) ->
 
     kInt = +k
     console.log "Attempting to render @pageCollection[#{kInt}]."
@@ -60,14 +60,14 @@ class Layout
       @pageCollection[kInt] = true
       console.log "  Laying out first section."
 
-      $spread = @generateArticle(kInt, '', '', section)
+      $spread = @generateArticle(kInt, layoutProps, kInt, section)
       @appendToDom($spread, kInt, len)
 
     else if @prevSectionsExits(kInt)
       console.log "  Laying out section #{kInt}"
       @pageCollection[kInt] = true
 
-      $spread = @generateArticle(kInt, '', '', section)
+      $spread = @generateArticle(kInt, layoutProps, kInt, section)
       @appendToDom($spread, kInt, len)
 
       for item, index in @pageQueue
@@ -76,8 +76,8 @@ class Layout
           console.log "    @pageCollection[#{index}] exists in the queue,
             laying out section #{index}."
 
-          $spread = @generateArticle(index, '', '', item)
-          @appendToDom($spread, index, item)
+          $spread = @generateArticle(index, item.props, index, item.content)
+          @appendToDom($spread, index, item.content)
 
           delete @pageQueue[index]
           console.log "      Deleting @pageCollection[#{index}] from queue."
@@ -85,7 +85,7 @@ class Layout
     else
       if $.inArray(kInt, @pageQueue) < 0 or @pageQueue[kInt] is 'undefined'
         console.log "    Adding @pageQueue[#{kInt}] to queue."
-        @pageQueue[kInt] = section
+        @pageQueue[kInt] = {content:section,props:layoutProps}
 
 
 
@@ -96,10 +96,8 @@ class Layout
       @spine = app.Http::getSpine(data)
     .then (data) =>
 
-      spreadIdx      = 0
-      $spread        = null
-      dataKeys       = Object.keys(data)
-      sectionLen     = +dataKeys.length - 1
+      dataKeys   = Object.keys(data)
+      sectionLen = +dataKeys.length - 1
 
       @pageCollection = dataKeys.reduce( (o, v, i) ->
         o[i] = null
@@ -108,64 +106,8 @@ class Layout
 
       $.each(data, (k,v) =>
         app.Http::get(v.href, 'html', (section) =>
-
-          $spread = @generateArticle(spreadIdx, v.properties, k, section)
-          $background = $('<section/>',
-            'class':'background'
-            'data-background-for':spreadIdx
-          )
-
-          # $(@settings.container).append($spread)
-          # if !$('article.backgrounds').length
-          #   $backgrounds = $('<article/>', {'class':'backgrounds'})
-          # $backgrounds.append($background)
-
-          @updatePageCollection(k,sectionLen,section)
-          ++spreadIdx
+          @updatePageCollection(k, sectionLen, section, v.properties)
         )
-
-
-
-      # for k, v of data
-      #   foo = k
-      #   app.Http::get(v.href, 'html', (section) =>
-
-          # console.log k
-
-      #     if sectionPos is 'left'
-      #       $spread = @generateArticle( spreadCount, 'left', k, section )
-
-      #     else if sectionPos is 'right'
-      #       if !$spread
-      #         console.warn("Appending a right-hand section at position
-      #           #{spreadCount} to an empty article.")
-      #         $spread = @generateArticle( spreadCount, 'right', k, section )
-
-      #       else
-
-      #         $spread.append($('<section/>', html: section))
-
-          # $background = $('<section/>',
-          #   'class':'background'
-          #   'data-background-for':spreadCount
-          # )
-
-          # if !$('article.backgrounds').length
-          #   $backgrounds = $('<article/>', {'class':'backgrounds'})
-      #       $(@settings.container).append($backgrounds)
-      #     else
-      #       $backgrounds = $('article.backgrounds')
-
-
-          # $(@settings.container).append($spread)
-          # $backgrounds.append($background)
-
-      #     ++spreadCount
-      #     ++pageCount
-
-      #     sectionPos = if sectionPos is 'left' then 'right' else 'left'
-      #     app.App.updateNodeCt($(section).find('*').length, pageCount, sectionLen)
-
       )
 
 

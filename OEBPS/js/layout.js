@@ -58,19 +58,19 @@ Layout = (function() {
     })(this)();
   };
 
-  Layout.prototype.updatePageCollection = function(k, len, section) {
+  Layout.prototype.updatePageCollection = function(k, len, section, layoutProps) {
     var $spread, index, item, j, kInt, len1, ref, results;
     kInt = +k;
     console.log("Attempting to render @pageCollection[" + kInt + "].");
     if (kInt === 0) {
       this.pageCollection[kInt] = true;
       console.log("  Laying out first section.");
-      $spread = this.generateArticle(kInt, '', '', section);
+      $spread = this.generateArticle(kInt, layoutProps, kInt, section);
       return this.appendToDom($spread, kInt, len);
     } else if (this.prevSectionsExits(kInt)) {
       console.log("  Laying out section " + kInt);
       this.pageCollection[kInt] = true;
-      $spread = this.generateArticle(kInt, '', '', section);
+      $spread = this.generateArticle(kInt, layoutProps, kInt, section);
       this.appendToDom($spread, kInt, len);
       ref = this.pageQueue;
       results = [];
@@ -79,8 +79,8 @@ Layout = (function() {
         if (this.pageQueue[index] && this.prevSectionsExits(index)) {
           this.pageCollection[index] = true;
           console.log("    @pageCollection[" + index + "] exists in the queue, laying out section " + index + ".");
-          $spread = this.generateArticle(index, '', '', item);
-          this.appendToDom($spread, index, item);
+          $spread = this.generateArticle(index, item.props, index, item.content);
+          this.appendToDom($spread, index, item.content);
           delete this.pageQueue[index];
           results.push(console.log("      Deleting @pageCollection[" + index + "] from queue."));
         } else {
@@ -91,7 +91,10 @@ Layout = (function() {
     } else {
       if ($.inArray(kInt, this.pageQueue) < 0 || this.pageQueue[kInt] === 'undefined') {
         console.log("    Adding @pageQueue[" + kInt + "] to queue.");
-        return this.pageQueue[kInt] = section;
+        return this.pageQueue[kInt] = {
+          content: section,
+          props: layoutProps
+        };
       }
     }
   };
@@ -103,9 +106,7 @@ Layout = (function() {
       };
     })(this)).then((function(_this) {
       return function(data) {
-        var $spread, dataKeys, sectionLen, spreadIdx;
-        spreadIdx = 0;
-        $spread = null;
+        var dataKeys, sectionLen;
         dataKeys = Object.keys(data);
         sectionLen = +dataKeys.length - 1;
         _this.pageCollection = dataKeys.reduce(function(o, v, i) {
@@ -114,14 +115,7 @@ Layout = (function() {
         }, {});
         return $.each(data, function(k, v) {
           return app.Http.prototype.get(v.href, 'html', function(section) {
-            var $background;
-            $spread = _this.generateArticle(spreadIdx, v.properties, k, section);
-            $background = $('<section/>', {
-              'class': 'background',
-              'data-background-for': spreadIdx
-            });
-            _this.updatePageCollection(k, sectionLen, section);
-            return ++spreadIdx;
+            return _this.updatePageCollection(k, sectionLen, section, v.properties);
           });
         });
       };
