@@ -5,7 +5,13 @@ var Reader,
 Reader = window.Reader != null ? window.Reader : window.Reader = {};
 
 window.Reader = (function() {
-  Reader.prototype.log = function(args) {};
+  Reader.debug = true;
+
+  Reader.prototype.log = function(args) {
+    if (Reader.debug) {
+      return window.console.log(args);
+    }
+  };
 
   Reader.prototype.updatenodeCount = function(nodes, currentSection, lastSection) {
     if (currentSection === lastSection) {
@@ -46,7 +52,6 @@ window.Reader = (function() {
     this.aspect = new Reader.Aspect(this.settings);
     this.layout = new Reader.Layout(this.settings);
     this.navigate = new Reader.Navigate(this.settings);
-    console.log(this.navigate);
     this.isResizing = false;
     this.isPositioned = false;
     this.nodeCount = 0;

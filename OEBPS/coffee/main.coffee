@@ -2,8 +2,11 @@ Reader = window.Reader ?= {}
 
 class window.Reader
 
+  @debug = true
+
   log: (args) =>
-    # window.console.log args
+    if Reader.debug
+      window.console.log args
 
   updatenodeCount: (nodes, currentSection, lastSection) =>
     if currentSection is lastSection
@@ -17,7 +20,6 @@ class window.Reader
       scope:'reader'
       transitionSpeed:250
       contentUrl:null
-      debug:false
       spread:true
       gutter:0
       hideOnResize:false
@@ -40,8 +42,6 @@ class window.Reader
     @aspect   = new Reader.Aspect(@settings)
     @layout   = new Reader.Layout(@settings)
     @navigate = new Reader.Navigate(@settings)
-
-    console.log @navigate
 
     @isResizing   = false
     @isPositioned = false

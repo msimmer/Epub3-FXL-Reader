@@ -1,7 +1,7 @@
 Reader = window.Reader ?= {}
 
 class Reader.Http
-  constructor: =>
+  constructor: ->
 
   get: (url, dataType, cb) ->
     return $.ajax(
