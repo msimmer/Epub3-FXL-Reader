@@ -70,12 +70,15 @@ class Aspect
 
   adjustArticlePosition: ->
     pageWidth = @getScale().fit * @originalX() + @settings.gutter
-    $('section').each( (i) ->
+    $sections = $('article.spread section')
+    len = $sections.length - 1
+    $sections.each( (i) ->
+      increment = i*pageWidth
       sectionPos =
-        "#{Reader.Utils::prefix.css}transform":"translateX(#{i*pageWidth}px)"
-      $(@).css(sectionPos)
+        "#{Reader.Utils::prefix.css}transform":"translateX(#{increment}px)"
+      $(@).css(sectionPos).attr('data-page-offset', increment)
+      if i is len then $(document).trigger('reader.articlesPositioned')
     )
-    $(document).trigger('reader.articlesPositioned')
 
 
   setZoom: (cb) ->

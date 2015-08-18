@@ -32,7 +32,6 @@ class App
     @layout.render()
 
     $(document).on('reader.contentReady', =>
-      console.log "Elements added to DOM."
       @nodeCt = $('*').length
       @aspect.setZoom(=>
         @aspect.adjustArticlePosition()
@@ -40,17 +39,18 @@ class App
     )
 
     $(document).on('reader.pagesFit', =>
-      console.log 'Pages adjust to `window`.'
+      console.log "\nSizing pages to `window`."
     )
 
     $(document).on('reader.articlesPositioned', =>
-      console.log 'Pages adjusted for width.'
+      console.log "\nPositioning articles."
     )
 
 
 
   @updateNodeCt: (nodes, currentSection, lastSection) ->
     if currentSection is lastSection
+      console.log "\nAll sections successfully added to the DOM."
       $(document).trigger('reader.contentReady')
 
 
