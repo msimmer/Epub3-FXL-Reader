@@ -1,8 +1,5 @@
 
-
-# allow for w > h page size
-# explicitly set `section` height
-  # explicitly set `main` height
+#
 # center `main`
 # adjust size of `main` to only show 2 pages
 #
@@ -61,8 +58,8 @@ class Aspect
     d = document
     e = d.documentElement
     b = d.getElementsByTagName('body')[0]
-    x = w.innerWidth || e.clientWidth || b.clientWidth
-    y = w.innerHeight|| e.clientHeight|| b.clientHeight
+    x = w.innerWidth  or e.clientWidth  or b.clientWidth
+    y = w.innerHeight or e.clientHeight or b.clientHeight
     return {
       x:x
       y:y
@@ -74,14 +71,21 @@ class Aspect
     windowDims = @windowDimensions()
     CSSproperties = [
       "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
-      "#{Reader.Utils::prefix.css}transform-origin:#{@settings.origin.x} #{@settings.origin.y}"
-      "height:#{windowDims.y / scale}"
-      "width:#{windowDims.x / scale}"
+      "#{Reader.Utils::prefix.css}transform-origin:#{@settings.origin.x} #{@settings.origin.y} 0"
+      "height:#{windowDims.y / scale}px"
+      "width:#{@originalX() * 2}px"
+      "left:#{ ( windowDims.x - ( ( @originalX() * 2 ) * scale ) ) / 2 }px"
     ]
+
 
     for str in CSSproperties
       props = str.split(':')
       scaleCSS[props[0]] = props[1]
+
+    $('.backgrounds').css(
+      width: ( @originalX() * 2 ) * scale
+      left: ( windowDims.x - ( ( @originalX() * 2 ) * scale ) ) / 2
+    )
 
     $(@settings.container).css(scaleCSS)
 
@@ -96,19 +100,15 @@ class Aspect
     maxX = @originalX() * multiplier.x
     maxY = @originalY() * multiplier.y
 
-    fit = null
-
-    if maxY >= windowDims.y
+    fit = if maxY >= windowDims.y
       reader.App::log "  Scaling content: Y > X, choosing Y."
-      fit = multiplier.y
+      multiplier.y
     else if maxX > windowDims.x
       reader.App::log "  Scaling content: X > Y, choosing X."
-      fit = multiplier.x
+      multiplier.x
     else
-      reader.App::log "  Scaling content: defaulting to Y"
-      fit = multiplier.y
-
-
+      reader.App::log "  Scaling content: defaulting to Y."
+      multiplier.y
 
     return{
       fitX:multiplier.x
@@ -118,14 +118,18 @@ class Aspect
 
 
   adjustArticlePosition: ->
+
+    $sections = $('article.spread section')
+
     pageWidth  = @getScale().fit * @originalX() + @settings.gutter
     pageHeight = @getScale().fit * @originalY()
 
 
-    $sections = $('article.spread section')
+
     len = $sections.length - 1
-    wx = pageWidth/@getScale().fit
-    wy = @windowY()/@getScale().fit
+    wx  = @originalX()
+    wy  = @originalY()
+
     $sections.each( (i) ->
 
       idx             = $(@).closest('article').attr('data-idx')

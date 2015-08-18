@@ -51,7 +51,7 @@ class App
 
 
   log: (args) =>
-    window.console.log args
+    # window.console.log args
 
 
 

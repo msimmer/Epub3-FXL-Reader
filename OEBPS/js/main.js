@@ -56,9 +56,7 @@ App = (function() {
     })(this));
   }
 
-  App.prototype.log = function(args) {
-    return window.console.log(args);
-  };
+  App.prototype.log = function(args) {};
 
   App.prototype.updateNodeCt = function(nodes, currentSection, lastSection) {
     if (currentSection === lastSection) {

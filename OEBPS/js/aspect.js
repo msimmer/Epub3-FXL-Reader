@@ -59,12 +59,16 @@ Aspect = (function() {
     var CSSproperties, j, len1, props, scaleCSS, str, windowDims;
     scaleCSS = {};
     windowDims = this.windowDimensions();
-    CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + this.settings.origin.x + " " + this.settings.origin.y, "height:" + (windowDims.y / scale), "width:" + (windowDims.x / scale)];
+    CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + this.settings.origin.x + " " + this.settings.origin.y + " 0", "height:" + (windowDims.y / scale) + "px", "width:" + (this.originalX() * 2) + "px", "left:" + ((windowDims.x - ((this.originalX() * 2) * scale)) / 2) + "px"];
     for (j = 0, len1 = CSSproperties.length; j < len1; j++) {
       str = CSSproperties[j];
       props = str.split(':');
       scaleCSS[props[0]] = props[1];
     }
+    $('.backgrounds').css({
+      width: (this.originalX() * 2) * scale,
+      left: (windowDims.x - ((this.originalX() * 2) * scale)) / 2
+    });
     $(this.settings.container).css(scaleCSS);
     if (cb) {
       return cb();
@@ -77,17 +81,7 @@ Aspect = (function() {
     windowDims = this.windowDimensions();
     maxX = this.originalX() * multiplier.x;
     maxY = this.originalY() * multiplier.y;
-    fit = null;
-    if (maxY >= windowDims.y) {
-      reader.App.prototype.log("  Scaling content: Y > X, choosing Y.");
-      fit = multiplier.y;
-    } else if (maxX > windowDims.x) {
-      reader.App.prototype.log("  Scaling content: X > Y, choosing X.");
-      fit = multiplier.x;
-    } else {
-      reader.App.prototype.log("  Scaling content: defaulting to Y");
-      fit = multiplier.y;
-    }
+    fit = maxY >= windowDims.y ? (reader.App.prototype.log("  Scaling content: Y > X, choosing Y."), multiplier.y) : maxX > windowDims.x ? (reader.App.prototype.log("  Scaling content: X > Y, choosing X."), multiplier.x) : (reader.App.prototype.log("  Scaling content: defaulting to Y."), multiplier.y);
     return {
       fitX: multiplier.x,
       fitY: multiplier.y,
@@ -97,12 +91,12 @@ Aspect = (function() {
 
   Aspect.prototype.adjustArticlePosition = function() {
     var $sections, len, pageHeight, pageWidth, wx, wy;
+    $sections = $('article.spread section');
     pageWidth = this.getScale().fit * this.originalX() + this.settings.gutter;
     pageHeight = this.getScale().fit * this.originalY();
-    $sections = $('article.spread section');
     len = $sections.length - 1;
-    wx = pageWidth / this.getScale().fit;
-    wy = this.windowY() / this.getScale().fit;
+    wx = this.originalX();
+    wy = this.originalY();
     return $sections.each(function(i) {
       var bgPos, idx, obj, scaledIncrement, sectionPos, windowIncrement;
       idx = $(this).closest('article').attr('data-idx');
