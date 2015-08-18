@@ -1,6 +1,6 @@
-class Layout
+Reader = window.Reader ?= {}
 
-  reader = window.Reader
+class Reader.Layout
 
   constructor: (@settings, @spine = {}) ->
 
@@ -8,7 +8,7 @@ class Layout
     @pageCollection = {}
 
 
-  generateArticle: (idx, pageSpread, position, section) ->
+  generateArticle: (idx, pageSpread, position, section) =>
     return $('<article/>',
       'class':'spread'
       'data-idx':idx
@@ -17,11 +17,11 @@ class Layout
     ).append($('<section/>', html: section))
 
 
-  appendToDom: ($spread, n, len) ->
-    reader.App::log "      Appending spread #{n} to DOM."
+  appendToDom: ($spread, n, len) =>
+    Reader::log "      Appending spread #{n} to DOM."
 
 
-    $(@settings.container).append($spread)
+    $(@settings.innerContainer).append($spread)
 
     if !$('article.backgrounds').length
       $backgrounds = $('<article/>', {'class':'backgrounds'}).appendTo('body')
@@ -35,35 +35,35 @@ class Layout
     )
 
     $backgrounds.append($background)
-    reader.App::updateNodeCt($spread.find('*').length, n, len)
+    Reader::updatenodeCount($spread.find('*').length, n, len)
 
 
 
 
-  prevSectionsExits:(idx) ->
+  prevSectionsExits:(idx) =>
     do =>
       for i in [0..idx - 1]
         if @pageCollection[i] is null
-          reader.App::log "    Can't render @pageCollection[#{idx}]
+          Reader::log "    Can't render @pageCollection[#{idx}]
             because @pageCollection[#{i}] doesn't exist."
           return false
       return true
 
 
-  updatePageCollection:(k, len, section, layoutProps) ->
+  updatePageCollection:(k, len, section, layoutProps) =>
 
     kInt = +k
-    reader.App::log "Attempting to render @pageCollection[#{kInt}]."
+    Reader::log "Attempting to render @pageCollection[#{kInt}]."
 
     if kInt is 0
       @pageCollection[kInt] = true
-      reader.App::log "  Laying out first section."
+      Reader::log "  Laying out first section."
 
       $spread = @generateArticle(kInt, layoutProps, kInt, section)
       @appendToDom($spread, kInt, len)
 
     else if @prevSectionsExits(kInt)
-      reader.App::log "  Laying out section #{kInt}"
+      Reader::log "  Laying out section #{kInt}"
       @pageCollection[kInt] = true
 
       $spread = @generateArticle(kInt, layoutProps, kInt, section)
@@ -72,27 +72,27 @@ class Layout
       for item, index in @pageQueue
         if @pageQueue[index] and @prevSectionsExits(index)
           @pageCollection[index] = true
-          reader.App::log "    @pageCollection[#{index}] exists in the queue,
+          Reader::log "    @pageCollection[#{index}] exists in the queue,
             laying out section #{index}."
 
           $spread = @generateArticle(index, item.props, index, item.content)
           @appendToDom($spread, index, item.content)
 
           delete @pageQueue[index]
-          reader.App::log "      Deleting @pageCollection[#{index}] from queue."
+          Reader::log "      Deleting @pageCollection[#{index}] from queue."
 
     else
       if $.inArray(kInt, @pageQueue) < 0 or @pageQueue[kInt] is 'undefined'
-        reader.App::log "    Adding @pageQueue[#{kInt}] to queue."
+        Reader::log "    Adding @pageQueue[#{kInt}] to queue."
         @pageQueue[kInt] = {content:section,props:layoutProps}
 
 
 
-  render: ->
+  render: =>
 
-    $.when( reader.Http::get(@settings.contentUrl, 'xml') )
+    $.when( Reader.Http::get(@settings.contentUrl, 'xml') )
     .then (data) =>
-      @spine = reader.Http::getSpine(data)
+      @spine = Reader.Http::getSpine(data)
     .then (data) =>
 
       dataKeys   = Object.keys(data)
@@ -104,11 +104,7 @@ class Layout
       , {})
 
       $.each(data, (k,v) =>
-        reader.Http::get(v.href, 'html', (section) =>
+        Reader.Http::get(v.href, 'html', (section) =>
           @updatePageCollection(k, sectionLen, section, v.properties)
         )
       )
-
-
-window.Reader ?= {}
-window.Reader.Layout = Layout

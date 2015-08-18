@@ -1,37 +1,48 @@
+
+/*
+
+  TODO:
+    migrate to scss
+    set variables
+    anmiation classes on resize
+
+*/
+
+
+
 html, body {
   overflow: hidden;
+  background-color: #222;
 }
 main {
-  /*background-color: orange;*/
-
-border: 1px solid red;
-position: fixed;
+  background-color: white;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   overflow-y: hidden;
-  overflow-x: scroll;
+  /*overflow-x: hidden;*/
 }
-
-
 .backgrounds {
   position: fixed;
   opacity: 1;
-  border: 1px solid green;
   height: 100%;
   z-index: -1;
   overflow: hidden;
 }
-
-
-
 .background {
   background: blue;
-  /*border-right: 1px solid black;*/
   position: absolute;
   top: 0;
   left: 0;
   z-index: -1;
   opacity: 0.3
 }
+#content {
+  -webkit-transition : -webkit-transform 0.4s ease-out;
+  -moz-transition    : -moz-transform 0.4s ease-out;
+  -o-transition      : -o-transform 0.4s ease-out;
+  transition         : transform 0.4s ease-out;
+}
+#content.animating{}

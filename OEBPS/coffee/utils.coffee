@@ -1,4 +1,6 @@
-class Utils
+Reader = window.Reader ?= {}
+
+class Reader.Utils
   constructor: ->
 
   # http://davidwalsh.name/vendor-prefix
@@ -28,5 +30,3 @@ class Utils
       timers[uniqueId] = setTimeout(callback, ms)
       return
 
-window.Reader ?= {}
-window.Reader.Utils = Utils

@@ -7,11 +7,9 @@
 #
 
 
+Reader = window.Reader ?= {}
 
-
-class Aspect
-
-  reader = window.Reader
+class Reader.Aspect
 
   constructor: (@settings) ->
 
@@ -37,23 +35,23 @@ class Aspect
   #   return obj
 
 
-  windowX: ->
+  windowX: =>
     @windowDimensions().x
-  windowY: ->
+  windowY: =>
     @windowDimensions().y
 
-  originalX: ->
+  originalX: =>
     @settings.viewport.width
-  originalY: ->
+  originalY: =>
     @settings.viewport.height
 
 
 
-  calcScale: ->
+  calcScale: =>
     x:@windowX() / @originalX()
     y:@windowY() / @originalY()
 
-  windowDimensions:->
+  windowDimensions:=>
     w = window
     d = document
     e = d.documentElement
@@ -66,7 +64,7 @@ class Aspect
     }
 
 
-  adjustMainContentTo: (scale, cb) ->
+  adjustMainContentTo: (scale, cb) =>
     scaleCSS   = {}
     windowDims = @windowDimensions()
     CSSproperties = [
@@ -87,12 +85,12 @@ class Aspect
       left: ( windowDims.x - ( ( @originalX() * 2 ) * scale ) ) / 2
     )
 
-    $(@settings.container).css(scaleCSS)
+    $(@settings.outerContainer).css(scaleCSS)
 
     if cb then cb()
 
 
-  getScale: ->
+  getScale: =>
 
     multiplier = @calcScale()
     windowDims = @windowDimensions()
@@ -101,13 +99,13 @@ class Aspect
     maxY = @originalY() * multiplier.y
 
     fit = if maxY >= windowDims.y
-      reader.App::log "  Scaling content: Y > X, choosing Y."
+      Reader::log "  Scaling content: Y > X, choosing Y."
       multiplier.y
     else if maxX > windowDims.x
-      reader.App::log "  Scaling content: X > Y, choosing X."
+      Reader::log "  Scaling content: X > Y, choosing X."
       multiplier.x
     else
-      reader.App::log "  Scaling content: defaulting to Y."
+      Reader::log "  Scaling content: defaulting to Y."
       multiplier.y
 
     return{
@@ -117,7 +115,7 @@ class Aspect
     }
 
 
-  adjustArticlePosition: ->
+  adjustArticlePosition: =>
 
     $sections = $('article.spread section')
 
@@ -156,13 +154,10 @@ class Aspect
     )
 
 
-  setZoom: (cb) ->
+  setZoom: (cb) =>
     scale = @getScale()
     @adjustMainContentTo(scale.fit, =>
       $(document).trigger('reader.pagesFit')
       if cb then cb()
     )
 
-
-window.Reader ?= {}
-window.Reader.Aspect = Aspect

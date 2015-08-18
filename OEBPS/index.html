@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -6,16 +6,19 @@
     <title>epub3-reader</title>
   </head>
   <body>
-    <main role="main"></main>
+    <main role="main">
+      <section id="content"></section>
+    </main>
     <script type="text/javascript" src="vendor/js/jquery.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/aspect.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/parser.js"></script>
-    <script type="text/javascript" src="js/layout.js"></script>
     <script type="text/javascript" src="js/http.js"></script>
-    <script type="text/javascript" src="js/aspect.js"></script>
-    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/layout.js"></script>
+    <script type="text/javascript" src="js/navigate.js"></script>
     <script type="text/javascript">
-    var app = new window.Reader.App({contentUrl:'/content.opf'});
+    var app = new Reader({contentUrl:'/content.opf'});
     </script>
   </body>
 </html>

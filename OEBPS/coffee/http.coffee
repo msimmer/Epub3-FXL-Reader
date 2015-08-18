@@ -1,5 +1,7 @@
-class Http
-  constructor: ->
+Reader = window.Reader ?= {}
+
+class Reader.Http
+  constructor: =>
 
   get: (url, dataType, cb) ->
     return $.ajax(
@@ -36,7 +38,3 @@ class Http
 
 
     return readerSpine
-
-
-window.Reader ?= {}
-window.Reader.Http = Http

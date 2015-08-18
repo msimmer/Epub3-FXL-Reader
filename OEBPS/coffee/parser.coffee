@@ -1,8 +1,10 @@
-class Parser
+Reader = window.Reader ?= {}
+
+class Reader.Parser
   constructor: ->
 
   # http://davidwalsh.name/convert-xml-json
-  xmlToJson: (xml) ->
+  xmlToJson: (xml) =>
     # Create the return object
     obj = {}
     if xml.nodeType == 1
@@ -35,13 +37,10 @@ class Parser
         i++
     obj
 
-  render: (file, type) ->
+  render: (file, type) =>
     switch type
       # when 'html'
         # ...
       when 'xml'
         window.Reader.Parser::xmlToJson(file)
 
-
-window.Reader ?= {}
-window.Reader.Parser = Parser
