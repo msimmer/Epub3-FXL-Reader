@@ -1,1 +1,22 @@
+html,body{overflow: hidden;}
+
+main {
+  /*background-color: orange;*/
+  position: fixed;
+  top: 0;
+  left:0;
+  right: 0;
+  bottom: 0;
+  overflow-y:hidden;
+  overflow-x:scroll;
+}
+.background {
+  background: blue;
+  border: 1px solid black;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.3
+}
 

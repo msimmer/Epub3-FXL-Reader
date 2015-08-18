@@ -2,9 +2,9 @@
 var Layout;
 
 Layout = (function() {
-  var app;
+  var reader;
 
-  app = window.Reader;
+  reader = window.Reader;
 
   function Layout(settings, spine) {
     this.settings = settings;
@@ -26,21 +26,21 @@ Layout = (function() {
 
   Layout.prototype.appendToDom = function($spread, n, len) {
     var $background, $backgrounds;
-    console.log("      Appending spread " + n + " to DOM.");
+    reader.App.prototype.log("      Appending spread " + n + " to DOM.");
     $(this.settings.container).append($spread);
     if (!$('article.backgrounds').length) {
       $backgrounds = $('<article/>', {
         'class': 'backgrounds'
-      });
+      }).appendTo('body');
     } else {
       $backgrounds = $('article.backgrounds');
     }
     $background = $('<section/>', {
       'class': 'background',
-      'data-background-for': ''
+      'data-background-for': n
     });
     $backgrounds.append($background);
-    return app.App.updateNodeCt($spread.find('*').length, n, len);
+    return reader.App.prototype.updateNodeCt($spread.find('*').length, n, len);
   };
 
   Layout.prototype.prevSectionsExits = function(idx) {
@@ -49,7 +49,7 @@ Layout = (function() {
         var i, j, ref;
         for (i = j = 0, ref = idx - 1; 0 <= ref ? j <= ref : j >= ref; i = 0 <= ref ? ++j : --j) {
           if (_this.pageCollection[i] === null) {
-            console.log("    Can't render @pageCollection[" + idx + "] because @pageCollection[" + i + "] doesn't exist.");
+            reader.App.prototype.log("    Can't render @pageCollection[" + idx + "] because @pageCollection[" + i + "] doesn't exist.");
             return false;
           }
         }
@@ -61,14 +61,14 @@ Layout = (function() {
   Layout.prototype.updatePageCollection = function(k, len, section, layoutProps) {
     var $spread, index, item, j, kInt, len1, ref, results;
     kInt = +k;
-    console.log("Attempting to render @pageCollection[" + kInt + "].");
+    reader.App.prototype.log("Attempting to render @pageCollection[" + kInt + "].");
     if (kInt === 0) {
       this.pageCollection[kInt] = true;
-      console.log("  Laying out first section.");
+      reader.App.prototype.log("  Laying out first section.");
       $spread = this.generateArticle(kInt, layoutProps, kInt, section);
       return this.appendToDom($spread, kInt, len);
     } else if (this.prevSectionsExits(kInt)) {
-      console.log("  Laying out section " + kInt);
+      reader.App.prototype.log("  Laying out section " + kInt);
       this.pageCollection[kInt] = true;
       $spread = this.generateArticle(kInt, layoutProps, kInt, section);
       this.appendToDom($spread, kInt, len);
@@ -78,11 +78,11 @@ Layout = (function() {
         item = ref[index];
         if (this.pageQueue[index] && this.prevSectionsExits(index)) {
           this.pageCollection[index] = true;
-          console.log("    @pageCollection[" + index + "] exists in the queue, laying out section " + index + ".");
+          reader.App.prototype.log("    @pageCollection[" + index + "] exists in the queue, laying out section " + index + ".");
           $spread = this.generateArticle(index, item.props, index, item.content);
           this.appendToDom($spread, index, item.content);
           delete this.pageQueue[index];
-          results.push(console.log("      Deleting @pageCollection[" + index + "] from queue."));
+          results.push(reader.App.prototype.log("      Deleting @pageCollection[" + index + "] from queue."));
         } else {
           results.push(void 0);
         }
@@ -90,7 +90,7 @@ Layout = (function() {
       return results;
     } else {
       if ($.inArray(kInt, this.pageQueue) < 0 || this.pageQueue[kInt] === 'undefined') {
-        console.log("    Adding @pageQueue[" + kInt + "] to queue.");
+        reader.App.prototype.log("    Adding @pageQueue[" + kInt + "] to queue.");
         return this.pageQueue[kInt] = {
           content: section,
           props: layoutProps
@@ -100,9 +100,9 @@ Layout = (function() {
   };
 
   Layout.prototype.render = function() {
-    return $.when(app.Http.prototype.get(this.settings.contentUrl, 'xml')).then((function(_this) {
+    return $.when(reader.Http.prototype.get(this.settings.contentUrl, 'xml')).then((function(_this) {
       return function(data) {
-        return _this.spine = app.Http.prototype.getSpine(data);
+        return _this.spine = reader.Http.prototype.getSpine(data);
       };
     })(this)).then((function(_this) {
       return function(data) {
@@ -114,7 +114,7 @@ Layout = (function() {
           return o;
         }, {});
         return $.each(data, function(k, v) {
-          return app.Http.prototype.get(v.href, 'html', function(section) {
+          return reader.Http.prototype.get(v.href, 'html', function(section) {
             return _this.updatePageCollection(k, sectionLen, section, v.properties);
           });
         });

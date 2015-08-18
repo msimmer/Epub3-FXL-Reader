@@ -1,10 +1,14 @@
 class App
+
+  reader = window.Reader
+
   constructor: (options)->
 
     defaults =
       contentUrl:null
+      debug:false
       spread:true
-      gutter:15
+      gutter:0
       viewport:
         width:468
         height:680
@@ -15,14 +19,12 @@ class App
         y:0
 
 
-    settings = $.extend({}, defaults, options)
-
-
-    @utils  = new window.Reader.Utils
-    @parser = new window.Reader.Parser
-    @http   = new window.Reader.Http
-    @aspect = new window.Reader.Aspect(settings)
-    @layout = new window.Reader.Layout(settings)
+    @settings = $.extend({}, defaults, options)
+    @utils    = new window.Reader.Utils
+    @parser   = new window.Reader.Parser
+    @http     = new window.Reader.Http
+    @aspect   = new window.Reader.Aspect(@settings)
+    @layout   = new window.Reader.Layout(@settings)
 
     @isResizing = false
     @nodeCt     = 0
@@ -32,6 +34,7 @@ class App
     @layout.render()
 
     $(document).on('reader.contentReady', =>
+      @log "\nReader content has been added to the DOM."
       @nodeCt = $('*').length
       @aspect.setZoom(=>
         @aspect.adjustArticlePosition()
@@ -39,20 +42,23 @@ class App
     )
 
     $(document).on('reader.pagesFit', =>
-      console.log "\nSizing pages to `window`."
+      @log "\nSizing pages to `window`."
     )
 
     $(document).on('reader.articlesPositioned', =>
-      console.log "\nPositioning articles."
+      @log "\nAll articles successfully positioned."
     )
 
 
+  log: (args) =>
+    window.console.log args
 
-  @updateNodeCt: (nodes, currentSection, lastSection) ->
+
+
+  updateNodeCt: (nodes, currentSection, lastSection) ->
     if currentSection is lastSection
-      console.log "\nAll sections successfully added to the DOM."
+      @log "\nAll sections successfully added to the DOM."
       $(document).trigger('reader.contentReady')
-
 
 
 

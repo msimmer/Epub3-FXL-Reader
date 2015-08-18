@@ -2,6 +2,10 @@
 var Aspect;
 
 Aspect = (function() {
+  var reader;
+
+  reader = window.Reader;
+
   function Aspect(settings) {
     this.settings = settings;
   }
@@ -14,29 +18,12 @@ Aspect = (function() {
     return val;
   };
 
-  Aspect.prototype.getViewportValues = function() {
-    var arr, obj;
-    obj = {};
-    arr = $('meta[name=viewport]').attr('content').split(',');
-    arr.map((function(_this) {
-      return function(val) {
-        var attr, prop, vals;
-        vals = val.split('=');
-        prop = _this.sanitizeValues(vals[0]);
-        attr = _this.sanitizeValues(vals[1]);
-        return obj[prop] = attr;
-      };
-    })(this));
-    this.settings.viewport = obj;
-    return obj;
-  };
-
   Aspect.prototype.windowX = function() {
-    return window.innerWidth;
+    return this.windowDimensions().x;
   };
 
   Aspect.prototype.windowY = function() {
-    return window.innerHeight;
+    return this.windowDimensions().y;
   };
 
   Aspect.prototype.originalX = function() {
@@ -54,10 +41,25 @@ Aspect = (function() {
     };
   };
 
+  Aspect.prototype.windowDimensions = function() {
+    var b, d, e, w, x, y;
+    w = window;
+    d = document;
+    e = d.documentElement;
+    b = d.getElementsByTagName('body')[0];
+    x = w.innerWidth || e.clientWidth || b.clientWidth;
+    y = w.innerHeight || e.clientHeight || b.clientHeight;
+    return {
+      x: x,
+      y: y
+    };
+  };
+
   Aspect.prototype.adjustMainContentTo = function(scale, cb) {
-    var CSSproperties, j, len1, props, scaleCSS, str;
+    var CSSproperties, j, len1, props, scaleCSS, str, windowDims;
     scaleCSS = {};
-    CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + this.settings.origin.x + " " + this.settings.origin.y];
+    windowDims = this.windowDimensions();
+    CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + this.settings.origin.x + " " + this.settings.origin.y, "height:" + (windowDims.y / scale), "width:" + (windowDims.x / scale)];
     for (j = 0, len1 = CSSproperties.length; j < len1; j++) {
       str = CSSproperties[j];
       props = str.split(':');
@@ -70,32 +72,57 @@ Aspect = (function() {
   };
 
   Aspect.prototype.getScale = function() {
-    var fit, fitX, fitY, multiplier;
+    var fit, maxX, maxY, multiplier, windowDims;
     multiplier = this.calcScale();
-    fitX = this.originalX() * multiplier.x;
-    fitY = this.originalY() * multiplier.y;
-    fit = fitY < fitX ? multiplier.y : multiplier.x;
+    windowDims = this.windowDimensions();
+    maxX = this.originalX() * multiplier.x;
+    maxY = this.originalY() * multiplier.y;
+    fit = null;
+    if (maxY >= windowDims.y) {
+      reader.App.prototype.log("  Scaling content: Y > X, choosing Y.");
+      fit = multiplier.y;
+    } else if (maxX > windowDims.x) {
+      reader.App.prototype.log("  Scaling content: X > Y, choosing X.");
+      fit = multiplier.x;
+    } else {
+      reader.App.prototype.log("  Scaling content: defaulting to Y");
+      fit = multiplier.y;
+    }
     return {
-      fitX: fitX,
-      fitY: fitY,
+      fitX: multiplier.x,
+      fitY: multiplier.y,
       fit: fit
     };
   };
 
   Aspect.prototype.adjustArticlePosition = function() {
-    var $sections, len, pageWidth;
+    var $sections, len, pageHeight, pageWidth, wx, wy;
     pageWidth = this.getScale().fit * this.originalX() + this.settings.gutter;
+    pageHeight = this.getScale().fit * this.originalY();
     $sections = $('article.spread section');
     len = $sections.length - 1;
+    wx = pageWidth / this.getScale().fit;
+    wy = this.windowY() / this.getScale().fit;
     return $sections.each(function(i) {
-      var increment, obj1, sectionPos;
-      increment = i * pageWidth;
+      var bgPos, idx, obj, scaledIncrement, sectionPos, windowIncrement;
+      idx = $(this).closest('article').attr('data-idx');
+      scaledIncrement = i * wx;
+      windowIncrement = i * pageWidth;
       sectionPos = (
-        obj1 = {},
-        obj1[Reader.Utils.prototype.prefix.css + "transform"] = "translateX(" + increment + "px)",
-        obj1
+        obj = {},
+        obj[Reader.Utils.prototype.prefix.css + "transform"] = "translateX(" + scaledIncrement + "px)",
+        obj.position = 'absolute',
+        obj.width = wx,
+        obj.height = wy,
+        obj
       );
-      $(this).css(sectionPos).attr('data-page-offset', increment);
+      bgPos = {
+        left: windowIncrement,
+        width: pageWidth,
+        height: pageHeight
+      };
+      $(this).css(sectionPos).attr('data-page-offset', scaledIncrement);
+      $('.background[data-background-for="' + idx + '"]').css(bgPos);
       if (i === len) {
         return $(document).trigger('reader.articlesPositioned');
       }
