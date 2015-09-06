@@ -2,7 +2,7 @@ Reader = window.Reader ?= {}
 
 class window.Reader
 
-  @debug = true
+  @debug = false
 
   log: (args) =>
     if Reader.debug
@@ -42,6 +42,7 @@ class window.Reader
     @aspect   = new Reader.Aspect(@settings)
     @layout   = new Reader.Layout(@settings)
     @navigate = new Reader.Navigate(@settings)
+    @navbar   = new Reader.Navbar(@settings)
 
     @isResizing   = false
     @isPositioned = false
@@ -59,9 +60,16 @@ class window.Reader
       @log "\nSizing pages to `window`."
     )
 
-    $(document).on('reader.articlesPositioned', =>
+    $(document).on('reader.articlesPositioned', (e, data) =>
       @isPositioned = true
       @log "\nAll articles successfully positioned."
+
+      @navigate.setIncrement(data.inc)
+      @navigate.setTotalLen(data.len)
+      @navigate.setCurrentPos(0)
+      @navigate.setCurrentIdx(0)
+
+      @navbar.append()
     )
 
 
@@ -98,7 +106,16 @@ class window.Reader
 
 
 
-    $(document).on('click', (e) =>
-      console.log 'click'
-      @navigate.goToStart()
-    )
+    # Navigation
+    #
+    $(document).on 'keydown', (e) =>
+      switch e.which
+        when 39 then @navigate.goToNext()
+        when 37 then @navigate.goToPrev()
+
+    $('#nav-toggle').on 'click', (e) ->
+      e.preventDefault()
+      $(@).toggleClass('nav-open')
+      $('#nav-bar').toggleClass('nav-open')
+      $('main').toggleClass('nav-open')
+

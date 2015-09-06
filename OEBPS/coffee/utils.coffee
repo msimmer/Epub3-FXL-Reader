@@ -30,3 +30,26 @@ class Reader.Utils
       timers[uniqueId] = setTimeout(callback, ms)
       return
 
+
+  # http://stackoverflow.com/questions/21912684/how-to-get-value-of-translatex-and-translatey
+  getComputedTranslateY: (obj) ->
+    if !window.getComputedStyle
+      return
+    style = getComputedStyle(obj)
+    transform = style.transform or style.webkitTransform or style.mozTransform
+    mat = transform.match(/^matrix3d\((.+)\)$/)
+    if mat
+      return parseFloat(mat[1].split(', ')[13])
+    mat = transform.match(/^matrix\((.+)\)$/)
+    if mat then parseFloat(mat[1].split(', ')[5]) else 0
+
+  getComputedTranslateX: (obj) ->
+    if !window.getComputedStyle
+      return
+    style = getComputedStyle(obj)
+    transform = style.transform or style.webkitTransform or style.mozTransform
+    mat = transform.match(/^matrix3d\((.+)\)$/)
+    if mat
+      return parseFloat(mat[1].split(', ')[12])
+    mat = transform.match(/^matrix\((.+)\)$/)
+    if mat then parseFloat(mat[1].split(', ')[4]) else 0

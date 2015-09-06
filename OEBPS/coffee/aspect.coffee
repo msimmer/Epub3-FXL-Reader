@@ -1,12 +1,4 @@
 
-#
-# center `main`
-# adjust size of `main` to only show 2 pages
-#
-#
-#
-
-
 Reader = window.Reader ?= {}
 
 class Reader.Aspect
@@ -22,19 +14,6 @@ class Reader.Aspect
           $.trim val
     return val
 
-
-  # getViewportValues: ->
-  #   obj = {}
-  #   arr = $('meta[name=viewport]').attr('content').split(',')
-  #   arr.map (val) =>
-  #     vals = val.split('=')
-  #     prop = @sanitizeValues vals[0]
-  #     attr = @sanitizeValues vals[1]
-  #     obj[prop] = attr
-  #   @settings.viewport = obj
-  #   return obj
-
-
   windowX: =>
     @windowDimensions().x
   windowY: =>
@@ -44,8 +23,6 @@ class Reader.Aspect
     @settings.viewport.width
   originalY: =>
     @settings.viewport.height
-
-
 
   calcScale: =>
     x:@windowX() / @originalX()
@@ -149,7 +126,10 @@ class Reader.Aspect
 
 
       if i is len
-        $(document).trigger('reader.articlesPositioned')
+        $(document).trigger('reader.articlesPositioned',
+          inc:wx
+          len:scaledIncrement
+        )
 
     )
 

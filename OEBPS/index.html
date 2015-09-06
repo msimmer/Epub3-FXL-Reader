@@ -6,17 +6,35 @@
     <title>epub3-reader</title>
   </head>
   <body>
+    <nav id="nav-bar">
+      <div id="nav-toggle">
+        <div class="angle"></div>
+        <a href="#">
+          <img class="b" src="burger.svg">
+          <img class="c" src="close.svg">
+        </a>
+      </div>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Home</a></li>
+      </ul>
+    </nav>
     <main role="main">
       <section id="content"></section>
     </main>
     <script type="text/javascript" src="vendor/js/jquery.js"></script>
     <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/navigate.js"></script>
+    <script type="text/javascript" src="js/navbar.js"></script>
+    <script type="text/javascript" src="js/layout.js"></script>
     <script type="text/javascript" src="js/aspect.js"></script>
     <script type="text/javascript" src="js/utils.js"></script>
     <script type="text/javascript" src="js/parser.js"></script>
     <script type="text/javascript" src="js/http.js"></script>
-    <script type="text/javascript" src="js/layout.js"></script>
-    <script type="text/javascript" src="js/navigate.js"></script>
     <script type="text/javascript">
     var app = new Reader({contentUrl:'/content.opf'});
     </script>

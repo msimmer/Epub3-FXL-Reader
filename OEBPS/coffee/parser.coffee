@@ -39,8 +39,6 @@ class Reader.Parser
 
   render: (file, type) =>
     switch type
-      # when 'html'
-        # ...
       when 'xml'
         window.Reader.Parser::xmlToJson(file)
 

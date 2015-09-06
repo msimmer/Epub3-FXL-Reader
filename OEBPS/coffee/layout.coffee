@@ -1,6 +1,6 @@
 Reader = window.Reader ?= {}
 
-class Reader.Layout
+class Reader.Layout extends Reader
 
   constructor: (@settings, @spine = {}) ->
 
@@ -17,9 +17,9 @@ class Reader.Layout
     ).append($('<section/>', html: section))
 
 
-  appendToDom: ($spread, n, len) =>
-    Reader::log "      Appending spread #{n} to DOM."
+  appendToDom: ($spread, n, len) ->
 
+    Reader::log "      Appending spread #{n} to DOM."
 
     $(@settings.innerContainer).append($spread)
 
@@ -38,8 +38,6 @@ class Reader.Layout
     Reader::updatenodeCount($spread.find('*').length, n, len)
 
 
-
-
   prevSectionsExits:(idx) =>
     do =>
       for i in [0..idx - 1]
@@ -52,7 +50,7 @@ class Reader.Layout
 
   updatePageCollection:(k, len, section, layoutProps) =>
 
-    kInt = +k
+    kInt = ~~k
     Reader::log "Attempting to render @pageCollection[#{kInt}]."
 
     if kInt is 0
@@ -96,7 +94,7 @@ class Reader.Layout
     .then (data) =>
 
       dataKeys   = Object.keys(data)
-      sectionLen = +dataKeys.length - 1
+      sectionLen = ~~dataKeys.length - 1
 
       @pageCollection = dataKeys.reduce( (o, v, i) ->
         o[i] = null

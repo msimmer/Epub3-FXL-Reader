@@ -1,70 +1,76 @@
-
-
-
-# TODO:
-#   get total len
-#   get/set offsets
-#   get/set indices
-#   get/set sections
-#   callbacks
-#   touch events
-#
-
-
-
+# coffee -o js -cw coffee/
 
 Reader = window.Reader ?= {}
 
-class Reader.Navigate
+class Reader.Navigate extends Reader
   constructor: (
     @settings
     @currentPos
     @currentIdx
     @currentSection
     @increment
-    @currentOffset
     @elem = $(@settings.innerContainer)
   ) ->
+
+  setTotalLen: (len) =>
+    @totalLen = len
+
+  getTotalLen: (len) =>
+    -@totalLen
 
   setCurrentPos: (pos) =>
     @currentPos = pos
   getCurrentPos: =>
     @currentPos
-  getCurrentOffset: ->
-    @currentOffset
+
   setCurrentIdx: (idx) =>
     @currentIdx = idx
   getCurrentIdx: =>
     @currentIdx
+
   setCurrentSection:(section) =>
     @currentSection = section
   getCurrentSection: =>
     @currentSection
+
   getIncrement: =>
     @increment
   setIncrement: (inc) =>
     @increment = inc
 
+  getNextPos: =>
+    nextIdx = @getCurrentIdx() + 1
+    elem = $("[data-idx=#{nextIdx}]")
+    if elem.length
+      pos = ~~elem.find("[data-page-offset]").attr("data-page-offset")
+      return -pos
+
+  getPrevPos: =>
+    prevIdx = @getCurrentIdx() - 1
+    elem = $("[data-idx=#{prevIdx}]")
+    if elem.length
+      pos = ~~elem.find("[data-page-offset]").attr("data-page-offset")
+      return -pos
+
   animateElem: (pos) =>
-    console.log @elem
     @elem.css("#{Reader.Utils::prefix.css}transform":"translateX(#{pos}px)")
 
-  goToNext: (pos) =>
-    desiredPos = @getIncrement()
-    totalLength = 100000
-    inc = if @getCurrentOffset() + desiredPos > totalLength then totalLength else desiredPos
-    @animateElem(inc)
-    # @setCurrentPos()
-    # @setCurrentIdx()
-    # @setCurrentSection()
+  goToNext: =>
+    desiredPos = @getNextPos()
+    totalLength = @getTotalLen()
 
-  goToPrev: (pos) =>
-    desiredPos = @getIncrement()
-    inc = if @getCurrentOffset() - desiredPos < 0 then 0 else desiredPos
-    @animateElem(- inc)
-    # @setCurrentPos()
-    # @setCurrentIdx()
-    # @setCurrentSection()
+    if desiredPos > totalLength
+      @animateElem(desiredPos)
+      idx = @getCurrentIdx()
+      @setCurrentIdx(idx + 1)
+
+
+  goToPrev: =>
+    desiredPos = @getPrevPos()
+    if desiredPos <= 0
+      @animateElem(desiredPos)
+      idx = @getCurrentIdx()
+      @setCurrentIdx(idx - 1)
 
   goToIdx: (idx) =>
 
@@ -75,12 +81,14 @@ class Reader.Navigate
     @setCurrentSection(0)
 
   goToEnd: =>
-    totalLength = 100000
-    @animateElem(totalLength)
+    totalLength = @getTotalLen()
+    inc = @getIncrement()
+    dest = totalLength - inc
+    @animateElem(dest)
     # @setCurrentPos()
     # @setCurrentIdx()
-    # @setCurrentSection()
 
   goToChapter: (idx) =>
+
 
 
