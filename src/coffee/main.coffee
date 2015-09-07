@@ -1,7 +1,7 @@
 
 class Reader
 
-  @debug = false
+  @debug = true
   @fsEnabled = false
 
   log: (args) =>
@@ -75,6 +75,8 @@ class Reader
     @isPositioned = false
     @nodeCount    = 0
 
+    $('body').addClass('loading');
+
     $(document).on('reader.contentReady', =>
       @log "\nReader content has been added to the DOM."
       @nodeCount = $('*').length
@@ -94,6 +96,8 @@ class Reader
       @navigate.setIncrement(data.inc)
       @navigate.setTotalLen(data.len)
       @navigate.setCurrentIdx(0)
+
+      $('body').removeClass('loading')
     )
 
     # Bootstrap
@@ -124,7 +128,7 @@ class Reader
             $body.removeClass("#{@settings.scope}-resize #{@settings.scope}-resize-end")
           , @settings.transitionSpeed)
           return
-        ), 500, 'some unique string'
+        ), 400, 'some unique string'
 
 
 

@@ -7,13 +7,22 @@ html, body {
   height: 100%;
   width: 100%;
   border: 0;
-  overflow: hidden;
+  /*overflow: hidden;*/
 }
-
+.col-wrap{
+  width: 600px;
+  height: 400px;
+  display: inline-block;
+}
+.col-wrap:after{
+  clear: both;
+  content: ' ';
+  display: block;
+}
 iframe {
   height: 100%;
   width: 100%;
   border: 0;
   overflow: hidden;
-  float: left;
+  display: block;
 }

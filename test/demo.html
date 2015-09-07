@@ -8,18 +8,43 @@
   </head>
   <body>
 
-    <iframe
-      src="http://localhost:8080/src/template.html"
-      data-content-url="/OEBPS/content.opf"></iframe>
+    <div class="col-wrap">
+      <iframe
+        src="http://localhost:8080/src/template.html"
+        data-content-url="/OEBPS/content.opf"
+        data-viewport-x="468"
+        data-viewport-y="680"></iframe>
+    </div>
+
+    <div class="col-wrap">
+       <iframe
+        src="http://localhost:8080/src/template.html"
+        data-content-url="/OEBPS-3/content.opf"
+        data-viewport-x="840"
+        data-viewport-y="1191"></iframe>
+    </div>
+
+    <div class="col-wrap">
+       <iframe
+        src="http://localhost:8080/src/template.html"
+        data-content-url="/OEBPS-2/content.opf"
+        data-viewport-x="722"
+        data-viewport-y="1024"></iframe>
+    </div>
 
     <script type="text/javascript" src="../vendor/js/jquery.js"></script>
     <script type="text/javascript">
       $(function(){
         $('iframe').each(function(){
           $(this).on('load', function(){
+            var $this = $(this);
             new this.contentWindow.Reader({
               docElem: this,
-              contentUrl: $(this).attr('data-content-url')
+              contentUrl: $this.attr('data-content-url'),
+              viewport:{
+                width:$this.attr('data-viewport-x'),
+                height:$this.attr('data-viewport-y')
+              }
             });
           });
         });

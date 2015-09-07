@@ -2,7 +2,7 @@ var Reader,
   bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
 Reader = (function() {
-  Reader.debug = false;
+  Reader.debug = true;
 
   Reader.fsEnabled = false;
 
@@ -89,6 +89,7 @@ Reader = (function() {
     this.isResizing = false;
     this.isPositioned = false;
     this.nodeCount = 0;
+    $('body').addClass('loading');
     $(document).on('reader.contentReady', (function(_this) {
       return function() {
         _this.log("\nReader content has been added to the DOM.");
@@ -109,7 +110,8 @@ Reader = (function() {
         _this.log("\nAll articles successfully positioned.");
         _this.navigate.setIncrement(data.inc);
         _this.navigate.setTotalLen(data.len);
-        return _this.navigate.setCurrentIdx(0);
+        _this.navigate.setCurrentIdx(0);
+        return $('body').removeClass('loading');
       };
     })(this));
     this.layout.render();
@@ -133,7 +135,7 @@ Reader = (function() {
             setTimeout(function() {
               return $body.removeClass(_this.settings.scope + "-resize " + _this.settings.scope + "-resize-end");
             }, _this.settings.transitionSpeed);
-          }), 500, 'some unique string');
+          }), 400, 'some unique string');
         };
       })(this)
     });
@@ -256,23 +258,27 @@ Reader.Aspect = (function() {
   };
 
   Aspect.prototype.adjustMainContentTo = function(scale, cb) {
-    var CSSproperties, j, len1, props, scaleCSS, str, windowDims;
-    scaleCSS = {};
-    windowDims = this.windowDimensions();
-    CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + this.settings.origin.x + " " + this.settings.origin.y + " 0", "height:" + (windowDims.y / scale) + "px", "width:" + (this.originalX() * 2) + "px", "left:" + ((windowDims.x - ((this.originalX() * 2) * scale)) / 2) + "px"];
-    for (j = 0, len1 = CSSproperties.length; j < len1; j++) {
-      str = CSSproperties[j];
-      props = str.split(':');
-      scaleCSS[props[0]] = props[1];
-    }
-    $('.backgrounds').css({
-      width: (this.originalX() * 2) * scale,
-      left: (windowDims.x - ((this.originalX() * 2) * scale)) / 2
-    });
-    $(this.settings.outerContainer).css(scaleCSS);
-    if (cb) {
-      return cb();
-    }
+    return setTimeout((function(_this) {
+      return function() {
+        var CSSproperties, j, len1, props, scaleCSS, str, windowDims;
+        scaleCSS = {};
+        windowDims = _this.windowDimensions();
+        CSSproperties = [Reader.Utils.prototype.prefix.css + "transform:scale(" + scale + ")", Reader.Utils.prototype.prefix.css + "transform-origin:" + _this.settings.origin.x + " " + _this.settings.origin.y + " 0", "height:" + (windowDims.y / scale) + "px", "width:" + (_this.originalX() * 2) + "px", "left:" + ((windowDims.x - ((_this.originalX() * 2) * scale)) / 2) + "px"];
+        for (j = 0, len1 = CSSproperties.length; j < len1; j++) {
+          str = CSSproperties[j];
+          props = str.split(':');
+          scaleCSS[props[0]] = props[1];
+        }
+        $('.backgrounds').css({
+          width: (_this.originalX() * 2) * scale,
+          left: (windowDims.x - ((_this.originalX() * 2) * scale)) / 2
+        });
+        $(_this.settings.outerContainer).css(scaleCSS);
+        if (cb) {
+          return cb();
+        }
+      };
+    })(this), 0);
   };
 
   Aspect.prototype.getScale = function() {

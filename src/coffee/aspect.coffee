@@ -40,29 +40,35 @@ class Reader.Aspect
 
 
   adjustMainContentTo: (scale, cb) =>
-    scaleCSS   = {}
-    windowDims = @windowDimensions()
-    CSSproperties = [
-      "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
-      "#{Reader.Utils::prefix.css}transform-origin:#{@settings.origin.x} #{@settings.origin.y} 0"
-      "height:#{windowDims.y / scale}px"
-      "width:#{@originalX() * 2}px"
-      "left:#{ ( windowDims.x - ( ( @originalX() * 2 ) * scale ) ) / 2 }px"
-    ]
+    setTimeout =>
+      # This is a bit ugly, but helpful to push this onto the event queue to
+      # ensure that the DOM is visible before triggering our callback, esp
+      # since we'll be hooking into this to remove our loader
+      #
+      scaleCSS   = {}
+      windowDims = @windowDimensions()
+      CSSproperties = [
+        "#{Reader.Utils::prefix.css}transform:scale(#{scale})"
+        "#{Reader.Utils::prefix.css}transform-origin:#{@settings.origin.x} #{@settings.origin.y} 0"
+        "height:#{windowDims.y / scale}px"
+        "width:#{@originalX() * 2}px"
+        "left:#{ ( windowDims.x - ( ( @originalX() * 2 ) * scale ) ) / 2 }px"
+      ]
 
 
-    for str in CSSproperties
-      props = str.split(':')
-      scaleCSS[props[0]] = props[1]
+      for str in CSSproperties
+        props = str.split(':')
+        scaleCSS[props[0]] = props[1]
 
-    $('.backgrounds').css(
-      width: ( @originalX() * 2 ) * scale
-      left: ( windowDims.x - ( ( @originalX() * 2 ) * scale ) ) / 2
-    )
+      $('.backgrounds').css(
+        width: ( @originalX() * 2 ) * scale
+        left: ( windowDims.x - ( ( @originalX() * 2 ) * scale ) ) / 2
+      )
 
-    $(@settings.outerContainer).css(scaleCSS)
+      $(@settings.outerContainer).css(scaleCSS)
 
-    if cb then cb()
+      if cb then cb()
+    ,0
 
 
   getScale: =>

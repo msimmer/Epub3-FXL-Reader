@@ -1,35 +1,36 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,user-scalable=0">
-    <link rel="stylesheet" href="fonts/font-awesome-4.4.0/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <title>Epub3 FXL Reader</title>
-  </head>
-  <body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,user-scalable=0">
+  <link rel="stylesheet" href="fonts/font-awesome-4.4.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../vendor/css/nprogress.css">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <title>Epub3 FXL Reader</title>
+</head>
+<body>
 
-    <nav id="nav-bar">
-      <div id="nav-toggle">
-        <div class="angle"></div>
-        <a class="open-close" href="#">
+  <nav id="nav-bar">
+    <div id="nav-toggle">
+      <div class="angle"></div>
+      <a class="open-close" href="#">
         <i class="fa fa-bars hide-on-open white"></i>
         <i class="fa fa-times hide-on-close"></i>
-        </a>
-      </div>
-      <ul>
-        <li>
-          <a class="go-to-pos" href="#" data-nav-pos="0">
+      </a>
+    </div>
+    <ul>
+      <li>
+        <a class="go-to-pos" href="#" data-nav-pos="0">
           <span class="nav-icon"><i class="fa fa-home"></i></span>
           <span class="mq-lg">Home</span>
-          </a>
-        </li>
-        <li>
-          <a id="chapter-display" href="#">
+        </a>
+      </li>
+      <li>
+        <a id="chapter-display" href="#">
           <span class="nav-icon"><i class="fa fa-list"></i></span>
           <span class="mq-lg">Contents</span>
-          </a>
-          <ul id="chapter-list">
+        </a>
+        <ul id="chapter-list">
 
             <!-- Hard coding for demo purposes. The logic here will should be
             injected by parsing the `landmarks` section in the ebook's
@@ -48,8 +49,8 @@
         </li>
         <li>
           <a class="fs" href="#">
-          <span class="nav-icon"><i class="fa fa-arrows-alt"></i></span>
-          <span class="mq-lg">Fullscreen</span>
+            <span class="nav-icon"><i class="fa fa-arrows-alt"></i></span>
+            <span class="mq-lg">Fullscreen</span>
           </a>
         </li>
       </ul>
@@ -63,12 +64,36 @@
       </nav>
     </main>
 
-  <script type="text/javascript" src="main.js"></script>
-  <script type="text/javascript">
-    new Reader({
-      contentUrl: '/OEBPS/content.opf'
-    });
-  </script>
+    <div id="spinner"></div>
 
-</body>
-</html>
+    <script type="text/javascript" src="main.js"></script>
+    <script type="text/javascript" src="../vendor/js/nprogress.js"></script>
+    <script type="text/javascript">
+      // new Reader({
+      //   contentUrl: '/OEBPS-1/content.opf',
+      //   viewport:{
+      //     width:567,
+      //     height:776
+      //   }
+      // });
+
+      // NProgress.configure({
+      //   minimum: 0.2
+      // });
+      // NProgress.start();
+      // $(document).on('reader.contentReady', function(){
+      //   NProgress.set(0.6);
+      // });
+      // $(document).on('reader.pagesFit', function(){
+      //   NProgress.set(0.8);
+      // });
+      // $(document).on('reader.articlesPositioned', function(){
+      //   var t = setTimeout(function(){
+      //     NProgress.done(true);
+      //     NProgress.remove();
+      //   }, 200);
+      // });
+    </script>
+
+  </body>
+  </html>
