@@ -48,7 +48,7 @@ gulp.task("clean", require("del").bind(null, [".tmp", "dist"]));
 gulp.task("copy", ["clean"], function() {
   return gulp.src([
       "src/css/**/*.{css}",
-      // "src/*.js",
+      "src/fonts/**/*.*",
       "src/img/**/*.{jpg,png,svg,gif,webp,ico}",
       "src/index.html"
     ], {

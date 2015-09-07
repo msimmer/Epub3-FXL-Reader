@@ -18,6 +18,16 @@ html, body {
   margin: 0 0 0 -200px;
   transition: margin-left .2s ease-out;
 }
+@media only screen and (max-width: 768px) {
+  #nav-bar {
+    width: 50px;
+  }
+}
+@media only screen and (max-width: 768px) {
+  #nav-bar {
+    margin: 0 0 0 -50px;
+  }
+}
 #nav-bar.nav-open {
   margin-left: 0;
 }
@@ -28,38 +38,21 @@ html, body {
   width: 32px;
   padding: 8px;
   position: fixed;
-  top: -1px;
-  left: 0;
+  top: -5px;
+  left: -2px;
+  color: inherit;
+  text-decoration: none;
   transition: left .2s ease-out, opacity .2s ease-out;
 }
-#nav-toggle a img {
-  display: inline-block;
-  vertical-align: baseline;
-  position: absolute;
-}
-#nav-toggle a img.b {
+#nav-toggle.nav-open a.open-close {
   top: 4px;
-  left: 3px;
-  height: 40%;
-  width: 40%;
-  opacity: 1;
+  left: 0;
+  left: 191px;
 }
-#nav-toggle a img.c {
-  width: 90%;
-  height: 80%;
-  top: 10px;
-  left: 0px;
-  opacity: 0;
-}
-
-#nav-toggle.nav-open a {
-  left: 200px;
-}
-#nav-toggle.nav-open a img.b {
-  opacity: 0;
-}
-#nav-toggle.nav-open a img.c {
-  opacity: 1;
+@media only screen and (max-width: 768px) {
+  #nav-toggle.nav-open a.open-close {
+    left: 42px;
+  }
 }
 
 #nav-bar ul {
@@ -72,7 +65,6 @@ html, body {
 #nav-bar ul li {
   margin: 0;
   padding: 0;
-  border-bottom: 1px solid #fff;
 }
 #nav-bar ul li a {
   text-decoration: none;
@@ -122,6 +114,31 @@ main.nav-open {
   margin-left: 200px;
   opacity: 0.3;
 }
+@media only screen and (max-width: 768px) {
+  main.nav-open {
+    margin-left: 50px;
+  }
+}
+
+.hide-on-close {
+  visibility: hidden;
+}
+
+.hide-on-open {
+  visibility: visible;
+}
+
+.nav-open .hide-on-open {
+  visibility: hidden;
+}
+
+.nav-open .hide-on-close {
+  visibility: visible;
+}
+
+.white {
+  color: white !important;
+}
 
 .backgrounds {
   position: fixed;
@@ -142,4 +159,34 @@ main.nav-open {
 #content {
   transition: -webkit-transform 0.4s ease-out;
   transition: transform 0.4s ease-out;
+}
+
+/* --------------------------------------------------------------
+
+  Media Queries
+
+  -------------------------------------------------------------- */
+@media only screen and (max-width: 768px) {
+  .mq-sm {
+    display: block;
+  }
+
+  .mq-lg {
+    display: none;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .nav-icon {
+    float: right;
+    padding-right: 10px;
+    display: block;
+  }
+
+  .mq-sm {
+    display: none;
+  }
+
+  .mq-lg {
+    display: block;
+  }
 }

@@ -13,21 +13,28 @@
       overflow: hidden;
     }
     iframe{
-      height: 50%;
-      width: 50%;
+      height: 60%;
+      width: 60%;
       border:0;
       overflow: hidden;
+      float: left;
     }
   </style>
 </head>
 <body>
-<iframe id="iframe" src="http://localhost:8080/src"></iframe>
+<iframe src="http://localhost:8080/src"></iframe>
 <script type="text/javascript" src="../vendor/js/jquery.js"></script>
 <script type="text/javascript">
-  $('iframe').on('load', function(){
-    var app = this.contentWindow.reader;
-    app.settings.docElem = this;
-  });
+  $(function(){
+    $('iframe').each(function(){
+      $(this).on('load', function(){
+        new this.contentWindow.reader({
+          docElem: this,
+          contentUrl: '/OEBPS/content.opf'
+        });
+      });
+    });
+  })
 </script>
 </body>
 </html>
