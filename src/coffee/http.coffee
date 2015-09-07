@@ -1,4 +1,3 @@
-Reader = window.Reader ?= {}
 
 class Reader.Http
   constructor: ->
@@ -31,10 +30,9 @@ class Reader.Http
 
     for entry, index in spine
       readerSpine[index] =
-        idref      :entry['@attributes'].idref
-        properties :entry['@attributes'].properties
-        properties :entry['@attributes'].properties
-        href       :manifestObj[entry['@attributes'].idref]
+        idref :entry['@attributes'].idref
+        props :entry['@attributes'].properties
+        href  :manifestObj[entry['@attributes'].idref]
 
 
     return readerSpine

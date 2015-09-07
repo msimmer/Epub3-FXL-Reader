@@ -1,7 +1,4 @@
 
-
-Reader = window.Reader ?= {}
-
 class Reader.Navbar extends Reader
   constructor: (
     @settings
@@ -9,4 +6,4 @@ class Reader.Navbar extends Reader
   ) ->
 
   append: ->
-    console.log $('body').append(@navbar)
+    $('body').append(@navbar)

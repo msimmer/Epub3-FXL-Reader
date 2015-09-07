@@ -1,4 +1,3 @@
-Reader = window.Reader ?= {}
 
 class Reader.Layout extends Reader
 
@@ -103,6 +102,6 @@ class Reader.Layout extends Reader
 
       $.each(data, (k,v) =>
         Reader.Http::get(v.href, 'html', (section) =>
-          @updatePageCollection(k, sectionLen, section, v.properties)
+          @updatePageCollection(k, sectionLen, section, v.props)
         )
       )

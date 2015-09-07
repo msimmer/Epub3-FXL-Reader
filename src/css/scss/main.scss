@@ -20,10 +20,9 @@ html, body {
   -moz-transition: margin-left .2s ease-out;
   -o-transition: margin-left .2s ease-out;
   transition: margin-left .2s ease-out;
-}
-
-#nav-bar.nav-open {
-  margin-left: 0;
+  &.nav-open {
+    margin-left: 0;
+  }
 }
 
 #nav-toggle a {
@@ -34,50 +33,39 @@ html, body {
   position: fixed;
   top: -1px;
   left: 0;
-  /*background: #222;*/
-  /*opacity: 0.5;*/
   -webkit-transition: left .2s ease-out, opacity .2s ease-out;
   -moz-transition: left .2s ease-out, opacity .2s ease-out;
   -o-transition: left .2s ease-out, opacity .2s ease-out;
   transition: left .2s ease-out, opacity .2s ease-out;
-}
-
-#nav-toggle a:hover {
-  opacity: 1;
+  img {
+    display: inline-block;
+    vertical-align: baseline;
+    position: absolute;
+    &.b{
+      top: 4px;
+      left: 3px;
+      height: 40%;
+      width: 40%;
+      opacity: 1;
+    }
+    &.c{
+      width: 90%;
+      height: 80%;
+      top: 10px;
+      left: 0px;
+      opacity: 0;
+    }
+  }
 }
 
 #nav-toggle.nav-open a {
   left: 200px;
-}
-
-#nav-toggle a img {
-  display: inline-block;
-  vertical-align: baseline;
-  position: absolute;
-}
-
-#nav-toggle a img.b {
-  top: 8px;
-  left: 4px;
-  height: 60%;
-  width: 60%;
-  opacity: 1;
-}
-
-#nav-toggle a img.c {
-  width: 150%;
-  height: 150%;
-  top: -6px;
-  left: -13px;
-  opacity: 0;
-}
-
-#nav-toggle.nav-open a img.b {
-  opacity: 0;
-}
-
-#nav-toggle.nav-open a img.c {
-  opacity: 1;
+  img.b {
+    opacity: 0;
+  }
+  img.c {
+    opacity: 1;
+  }
 }
 
 #nav-bar ul {
@@ -86,36 +74,33 @@ html, body {
   padding: 0;
   z-index: 1;
   position: relative;
-}
-
-#nav-bar ul li {
-  margin: 0;
-  padding: 0;
-  border-bottom: 1px solid #fff;
-}
-
-#nav-bar ul li a {
-  text-decoration: none;
-  color: #fff;
-  display: block;
-  height: 100%;
-  width: calc( 100% - 28px);
-  padding: 14px;
-  -webkit-transition: color .2s ease-out, background-color .2s ease-out;
-  -moz-transition: color .2s ease-out, background-color .2s ease-out;
-  -o-transition: color .2s ease-out, background-color .2s ease-out;
-  transition: color .2s ease-out, background-color .2s ease-out;
-}
-
-#nav-bar ul li a:hover {
-  background: #fff;
-  color: #222;
+  li {
+    margin: 0;
+    padding: 0;
+    border-bottom: 1px solid #fff;
+    a {
+      text-decoration: none;
+      color: #fff;
+      display: block;
+      height: 100%;
+      width: calc( 100% - 28px);
+      padding: 14px;
+      -webkit-transition: color .2s ease-out, background-color .2s ease-out;
+      -moz-transition: color .2s ease-out, background-color .2s ease-out;
+      -o-transition: color .2s ease-out, background-color .2s ease-out;
+      transition: color .2s ease-out, background-color .2s ease-out;
+      &:hover {
+        background: #fff;
+        color: #222;
+      }
+    }
+  }
 }
 
 .angle {
   position: fixed;
-  height: 100px;
-  width: 100px;
+  height: 85px;
+  width: 85px;
   background-color: black;
   top: -50px;
   left: -50px;
@@ -146,11 +131,10 @@ main {
   -moz-transition: opacity .2s ease-out, margin-left .2s ease-out;
   -o-transition: opacity .2s ease-out, margin-left .2s ease-out;
   transition: opacity .2s ease-out, margin-left .2s ease-out;
-}
-
-main.nav-open {
-  margin-left: 200px;
-  opacity: 0.3;
+  &.nav-open {
+    margin-left: 200px;
+    opacity: 0.3;
+  }
 }
 
 .backgrounds {
@@ -176,4 +160,3 @@ main.nav-open {
   transition: transform 0.4s ease-out;
 }
 
-#content.animating {}
