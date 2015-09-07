@@ -41,8 +41,8 @@ html, body {
     width: 32px;
     padding: 8px;
     position: fixed;
-    top: -5px;
-    left: -2px;
+    top: 3px;
+    left: 7px;
     color: inherit;
     text-decoration: none;
     -webkit-transition: left .2s ease-out, opacity .2s ease-out;
@@ -91,8 +91,8 @@ html, body {
 
 .angle {
   position: fixed;
-  height: 85px;
-  width: 85px;
+  height: 100px;
+  width: 100px;
   background-color: black;
   top: -50px;
   left: -50px;
