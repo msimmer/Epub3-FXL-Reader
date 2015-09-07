@@ -1,4 +1,3 @@
-Reader = window.Reader ?= {}
 
 class Reader.Utils
   constructor: ->

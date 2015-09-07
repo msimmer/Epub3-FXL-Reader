@@ -1,4 +1,3 @@
-Reader = window.Reader ?= {}
 
 class window.Reader
 
@@ -71,7 +70,6 @@ class window.Reader
 
       @navbar.append()
     )
-
 
     # Bootstrap
     #

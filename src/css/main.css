@@ -1,0 +1,145 @@
+html, body {
+  overflow: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#nav-bar {
+  position: fixed;
+  width: 200px;
+  height: 100%;
+  z-index: 999;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #222;
+  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  margin: 0 0 0 -200px;
+  transition: margin-left .2s ease-out;
+}
+#nav-bar.nav-open {
+  margin-left: 0;
+}
+
+#nav-toggle a {
+  display: block;
+  height: 32px;
+  width: 32px;
+  padding: 8px;
+  position: fixed;
+  top: -1px;
+  left: 0;
+  transition: left .2s ease-out, opacity .2s ease-out;
+}
+#nav-toggle a img {
+  display: inline-block;
+  vertical-align: baseline;
+  position: absolute;
+}
+#nav-toggle a img.b {
+  top: 4px;
+  left: 3px;
+  height: 40%;
+  width: 40%;
+  opacity: 1;
+}
+#nav-toggle a img.c {
+  width: 90%;
+  height: 80%;
+  top: 10px;
+  left: 0px;
+  opacity: 0;
+}
+
+#nav-toggle.nav-open a {
+  left: 200px;
+}
+#nav-toggle.nav-open a img.b {
+  opacity: 0;
+}
+#nav-toggle.nav-open a img.c {
+  opacity: 1;
+}
+
+#nav-bar ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  z-index: 1;
+  position: relative;
+}
+#nav-bar ul li {
+  margin: 0;
+  padding: 0;
+  border-bottom: 1px solid #fff;
+}
+#nav-bar ul li a {
+  text-decoration: none;
+  color: #fff;
+  display: block;
+  height: 100%;
+  width: calc( 100% - 28px);
+  padding: 14px;
+  transition: color .2s ease-out, background-color .2s ease-out;
+}
+#nav-bar ul li a:hover {
+  background: #fff;
+  color: #222;
+}
+
+.angle {
+  position: fixed;
+  height: 85px;
+  width: 85px;
+  background-color: black;
+  top: -50px;
+  left: -50px;
+  z-index: 0;
+  opacity: 1;
+  opacity: 1;
+  -webkit-transform: rotate(45deg);
+          transform: rotate(45deg);
+  transition: opacity .2s ease-out;
+}
+
+#nav-toggle.nav-open .angle {
+  opacity: 0;
+}
+
+main {
+  background-color: #fff;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: hidden;
+  overflow-x: hidden;
+  transition: opacity .2s ease-out, margin-left .2s ease-out;
+}
+main.nav-open {
+  margin-left: 200px;
+  opacity: 0.3;
+}
+
+.backgrounds {
+  position: fixed;
+  opacity: 1;
+  height: 100%;
+  z-index: -1;
+  overflow: hidden;
+}
+
+.background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  opacity: 0.3;
+}
+
+#content {
+  transition: -webkit-transform 0.4s ease-out;
+  transition: transform 0.4s ease-out;
+}

@@ -1,6 +1,3 @@
-# coffee -o js -cw coffee/
-
-Reader = window.Reader ?= {}
 
 class Reader.Navigate extends Reader
   constructor: (

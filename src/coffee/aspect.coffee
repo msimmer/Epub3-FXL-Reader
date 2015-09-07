@@ -1,6 +1,4 @@
 
-Reader = window.Reader ?= {}
-
 class Reader.Aspect
 
   constructor: (@settings) ->
