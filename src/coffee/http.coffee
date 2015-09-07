@@ -1,6 +1,5 @@
 
 class Reader.Http
-  constructor: ->
 
   get: (url, dataType, cb) ->
     return $.ajax(

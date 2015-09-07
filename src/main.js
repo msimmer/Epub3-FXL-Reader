@@ -28,7 +28,8 @@ Reader = (function() {
   Reader.prototype.navToggle = function() {
     $('#nav-toggle').toggleClass('nav-open');
     $('#nav-bar').toggleClass('nav-open');
-    return $(this.settings.outerContainer).toggleClass('nav-open');
+    $(this.settings.outerContainer).toggleClass('nav-open');
+    return $('#chapter-list').removeClass('open');
   };
 
   Reader.prototype.fsToggle = function() {
@@ -91,7 +92,6 @@ Reader = (function() {
     this.aspect = new Reader.Aspect(this.settings);
     this.layout = new Reader.Layout(this.settings);
     this.navigate = new Reader.Navigate(this.settings);
-    this.navbar = new Reader.Navbar(this.settings);
     this.isResizing = false;
     this.isPositioned = false;
     this.nodeCount = 0;
@@ -115,9 +115,7 @@ Reader = (function() {
         _this.log("\nAll articles successfully positioned.");
         _this.navigate.setIncrement(data.inc);
         _this.navigate.setTotalLen(data.len);
-        _this.navigate.setCurrentPos(0);
-        _this.navigate.setCurrentIdx(0);
-        return _this.navbar.append();
+        return _this.navigate.setCurrentIdx(0);
       };
     })(this));
     this.layout.render();
@@ -172,6 +170,29 @@ Reader = (function() {
         return _this.navToggle();
       };
     })(this));
+    $('#click-nav a').on('click', (function(_this) {
+      return function(e) {
+        var $this;
+        e.preventDefault();
+        $this = $(e.target);
+        if ($this.hasClass('prev')) {
+          return _this.navigate.goToPrev();
+        } else if ($this.hasClass('next')) {
+          return _this.navigate.goToNext();
+        }
+      };
+    })(this));
+    $('.go-to-pos').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        _this.navToggle();
+        return _this.navigate.goToIdx($(e.currentTarget).attr('data-nav-pos'));
+      };
+    })(this));
+    $('#chapter-display').on('click', function(e) {
+      e.preventDefault();
+      return $('#chapter-list').toggleClass('open');
+    });
   }
 
   return Reader;
@@ -328,8 +349,6 @@ Reader.Aspect = (function() {
 
 })();
 
-
-
 Reader.Http = (function() {
   function Http() {}
 
@@ -463,7 +482,7 @@ Reader.Layout = (function(superClass) {
           this.pageCollection[index] = true;
           Reader.prototype.log("    @pageCollection[" + index + "] exists in the queue, laying out section " + index + ".");
           $spread = this.generateArticle(index, item.props, index, item.content);
-          this.appendToDom($spread, index, item.content);
+          this.appendToDom($spread, index, len);
           delete this.pageQueue[index];
           results.push(Reader.prototype.log("      Deleting @pageCollection[" + index + "] from queue."));
         } else {
@@ -509,25 +528,6 @@ Reader.Layout = (function(superClass) {
 
 })(Reader);
 
-var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
-  hasProp = {}.hasOwnProperty;
-
-Reader.Navbar = (function(superClass) {
-  extend(Navbar, superClass);
-
-  function Navbar(settings, elem) {
-    this.settings = settings;
-    this.elem = elem != null ? elem : $(this.settings.innerContainer);
-  }
-
-  Navbar.prototype.append = function() {
-    return $('body').append(this.navbar);
-  };
-
-  return Navbar;
-
-})(Reader);
-
 var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; },
   extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
   hasProp = {}.hasOwnProperty;
@@ -542,7 +542,6 @@ Reader.Navigate = (function(superClass) {
     this.currentSection = currentSection;
     this.increment = increment;
     this.elem = elem1 != null ? elem1 : $(this.settings.innerContainer);
-    this.goToChapter = bind(this.goToChapter, this);
     this.goToEnd = bind(this.goToEnd, this);
     this.goToStart = bind(this.goToStart, this);
     this.goToIdx = bind(this.goToIdx, this);
@@ -557,30 +556,30 @@ Reader.Navigate = (function(superClass) {
     this.setCurrentSection = bind(this.setCurrentSection, this);
     this.getCurrentIdx = bind(this.getCurrentIdx, this);
     this.setCurrentIdx = bind(this.setCurrentIdx, this);
-    this.getCurrentPos = bind(this.getCurrentPos, this);
-    this.setCurrentPos = bind(this.setCurrentPos, this);
     this.getTotalLen = bind(this.getTotalLen, this);
     this.setTotalLen = bind(this.setTotalLen, this);
+    this.getPosByIdx = bind(this.getPosByIdx, this);
   }
 
-  Navigate.prototype.setTotalLen = function(len) {
-    return this.totalLen = len;
+  Navigate.prototype.getPosByIdx = function(idx) {
+    var elem, pos;
+    elem = $("[data-idx=" + idx + "]");
+    if (elem.length) {
+      pos = ~~elem.find("[data-page-offset]").attr("data-page-offset");
+      return -pos;
+    }
   };
 
-  Navigate.prototype.getTotalLen = function(len) {
+  Navigate.prototype.setTotalLen = function(len) {
+    return this.totalLen = ~~len;
+  };
+
+  Navigate.prototype.getTotalLen = function() {
     return -this.totalLen;
   };
 
-  Navigate.prototype.setCurrentPos = function(pos) {
-    return this.currentPos = pos;
-  };
-
-  Navigate.prototype.getCurrentPos = function() {
-    return this.currentPos;
-  };
-
   Navigate.prototype.setCurrentIdx = function(idx) {
-    return this.currentIdx = idx;
+    return this.currentIdx = ~~idx;
   };
 
   Navigate.prototype.getCurrentIdx = function() {
@@ -600,7 +599,7 @@ Reader.Navigate = (function(superClass) {
   };
 
   Navigate.prototype.setIncrement = function(inc) {
-    return this.increment = inc;
+    return this.increment = ~~inc;
   };
 
   Navigate.prototype.getNextPos = function() {
@@ -653,11 +652,16 @@ Reader.Navigate = (function(superClass) {
     }
   };
 
-  Navigate.prototype.goToIdx = function(idx) {};
+  Navigate.prototype.goToIdx = function(idx) {
+    var pos;
+    pos = this.getPosByIdx(idx);
+    this.animateElem(pos);
+    this.setCurrentIdx(idx);
+    return this.setCurrentSection(idx);
+  };
 
   Navigate.prototype.goToStart = function() {
     this.animateElem(0);
-    this.setCurrentPos(0);
     this.setCurrentIdx(0);
     return this.setCurrentSection(0);
   };
@@ -669,8 +673,6 @@ Reader.Navigate = (function(superClass) {
     dest = totalLength - inc;
     return this.animateElem(dest);
   };
-
-  Navigate.prototype.goToChapter = function(idx) {};
 
   return Navigate;
 
@@ -706,14 +708,14 @@ Reader.Parser = (function() {
         item = xml.childNodes.item(i);
         nodeName = item.nodeName;
         if (typeof obj[nodeName] === 'undefined') {
-          obj[nodeName] = window.Reader.Parser.prototype.xmlToJson(item);
+          obj[nodeName] = Reader.Parser.prototype.xmlToJson(item);
         } else {
           if (typeof obj[nodeName].push === 'undefined') {
             old = obj[nodeName];
             obj[nodeName] = [];
             obj[nodeName].push(old);
           }
-          obj[nodeName].push(window.Reader.Parser.prototype.xmlToJson(item));
+          obj[nodeName].push(Reader.Parser.prototype.xmlToJson(item));
         }
         i++;
       }
@@ -724,7 +726,7 @@ Reader.Parser = (function() {
   Parser.prototype.render = function(file, type) {
     switch (type) {
       case 'xml':
-        return window.Reader.Parser.prototype.xmlToJson(file);
+        return Reader.Parser.prototype.xmlToJson(file);
     }
   };
 

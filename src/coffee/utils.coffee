@@ -1,6 +1,5 @@
 
 class Reader.Utils
-  constructor: ->
 
   # http://davidwalsh.name/vendor-prefix
   prefix: do ->

@@ -1,6 +1,5 @@
 
 class Reader.Parser
-  constructor: ->
 
   # http://davidwalsh.name/convert-xml-json
   xmlToJson: (xml) =>
@@ -26,18 +25,18 @@ class Reader.Parser
         item = xml.childNodes.item(i)
         nodeName = item.nodeName
         if typeof obj[nodeName] == 'undefined'
-          obj[nodeName] = window.Reader.Parser::xmlToJson(item)
+          obj[nodeName] = Reader.Parser::xmlToJson(item)
         else
           if typeof obj[nodeName].push == 'undefined'
             old = obj[nodeName]
             obj[nodeName] = []
             obj[nodeName].push old
-          obj[nodeName].push window.Reader.Parser::xmlToJson(item)
+          obj[nodeName].push Reader.Parser::xmlToJson(item)
         i++
     obj
 
   render: (file, type) =>
     switch type
       when 'xml'
-        window.Reader.Parser::xmlToJson(file)
+        Reader.Parser::xmlToJson(file)
 

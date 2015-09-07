@@ -1,113 +1,15 @@
 
-// Base
-//
+/* --------------------------------------------------------------
+
+  Base
+
+  -------------------------------------------------------------- */
+
 html, body {
   overflow: hidden;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-}
-
-#nav-bar {
-  position: fixed;
-  width: $navbar-width;
-  @media #{$mq-sm} {
-    width:$navbar-width-sm;
-  }
-  height: 100%;
-  z-index: 999;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  background-color: $dark;
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
-  margin: 0 0 0 #{-$navbar-width};
-  @media #{$mq-sm} {
-    margin: 0 0 0 #{-$navbar-width-sm};
-  }
-  -webkit-transition: margin-left .2s ease-out;
-  -moz-transition: margin-left .2s ease-out;
-  -o-transition: margin-left .2s ease-out;
-  transition: margin-left .2s ease-out;
-  &.nav-open {
-    margin-left: 0;
-  }
-}
-
-#nav-toggle{
-  a {
-    display: block;
-    height: 32px;
-    width: 32px;
-    padding: 8px;
-    position: fixed;
-    top: 3px;
-    left: 7px;
-    color: inherit;
-    text-decoration: none;
-    -webkit-transition: left .2s ease-out, opacity .2s ease-out;
-    -moz-transition: left .2s ease-out, opacity .2s ease-out;
-    -o-transition: left .2s ease-out, opacity .2s ease-out;
-    transition: left .2s ease-out, opacity .2s ease-out;
-  }
-  &.nav-open a.open-close{
-    top: 4px;
-    left: 0;
-    left: 191px;
-    @media #{$mq-sm} {
-      left: 42px;
-    }
-  }
-}
-
-#nav-bar ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  z-index: 1;
-  position: relative;
-  li {
-    margin: 0;
-    padding: 0;
-    // border-bottom: 1px solid $white;
-    a {
-      text-decoration: none;
-      color: $white;
-      display: block;
-      height: 100%;
-      width: calc( 100% - 28px);
-      padding: 14px;
-      -webkit-transition: color .2s ease-out, background-color .2s ease-out;
-      -moz-transition: color .2s ease-out, background-color .2s ease-out;
-      -o-transition: color .2s ease-out, background-color .2s ease-out;
-      transition: color .2s ease-out, background-color .2s ease-out;
-      &:hover {
-        background: $white;
-        color: $dark;
-      }
-    }
-  }
-}
-
-.angle {
-  position: fixed;
-  height: 100px;
-  width: 100px;
-  background-color: black;
-  top: -50px;
-  left: -50px;
-  z-index: 0;
-  opacity: 1;
-  opacity:1;
-  transform: rotate(45deg);
-  -webkit-transition: opacity .2s ease-out;
-  -moz-transition: opacity .2s ease-out;
-  -o-transition: opacity .2s ease-out;
-  transition: opacity .2s ease-out;
-}
-
-#nav-toggle.nav-open .angle{
-  opacity: 0;
 }
 
 main {
@@ -119,9 +21,6 @@ main {
   bottom: 0;
   overflow-y: hidden;
   overflow-x: hidden;
-  -webkit-transition: opacity .2s ease-out, margin-left .2s ease-out;
-  -moz-transition: opacity .2s ease-out, margin-left .2s ease-out;
-  -o-transition: opacity .2s ease-out, margin-left .2s ease-out;
   transition: opacity .2s ease-out, margin-left .2s ease-out;
   &.nav-open {
     @media #{$mq-sm} {
@@ -167,9 +66,6 @@ main {
 }
 
 #content {
-  -webkit-transition: -webkit-transform 0.4s ease-out;
-  -moz-transition: -moz-transform 0.4s ease-out;
-  -o-transition: -o-transform 0.4s ease-out;
   transition: transform 0.4s ease-out;
 }
 

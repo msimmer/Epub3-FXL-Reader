@@ -9,19 +9,21 @@ class Reader.Navigate extends Reader
     @elem = $(@settings.innerContainer)
   ) ->
 
-  setTotalLen: (len) =>
-    @totalLen = len
 
-  getTotalLen: (len) =>
+  getPosByIdx: (idx) =>
+    elem = $("[data-idx=#{idx}]")
+    if elem.length
+      pos = ~~elem.find("[data-page-offset]").attr("data-page-offset")
+      return -pos
+
+  setTotalLen: (len) =>
+    @totalLen = ~~len
+
+  getTotalLen: =>
     -@totalLen
 
-  setCurrentPos: (pos) =>
-    @currentPos = pos
-  getCurrentPos: =>
-    @currentPos
-
   setCurrentIdx: (idx) =>
-    @currentIdx = idx
+    @currentIdx = ~~idx
   getCurrentIdx: =>
     @currentIdx
 
@@ -33,7 +35,7 @@ class Reader.Navigate extends Reader
   getIncrement: =>
     @increment
   setIncrement: (inc) =>
-    @increment = inc
+    @increment = ~~inc
 
   getNextPos: =>
     nextIdx = @getCurrentIdx() + 1
@@ -70,10 +72,13 @@ class Reader.Navigate extends Reader
       @setCurrentIdx(idx - 1)
 
   goToIdx: (idx) =>
+    pos = @getPosByIdx(idx)
+    @animateElem(pos)
+    @setCurrentIdx(idx)
+    @setCurrentSection(idx)
 
   goToStart: =>
     @animateElem(0)
-    @setCurrentPos(0)
     @setCurrentIdx(0)
     @setCurrentSection(0)
 
@@ -82,10 +87,3 @@ class Reader.Navigate extends Reader
     inc = @getIncrement()
     dest = totalLength - inc
     @animateElem(dest)
-    # @setCurrentPos()
-    # @setCurrentIdx()
-
-  goToChapter: (idx) =>
-
-
-

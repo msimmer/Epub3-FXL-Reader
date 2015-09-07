@@ -17,7 +17,7 @@
       $(function(){
         $('iframe').each(function(){
           $(this).on('load', function(){
-            new this.contentWindow.reader({
+            new this.contentWindow.Reader({
               docElem: this,
               contentUrl: $(this).attr('data-content-url')
             });

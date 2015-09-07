@@ -1,8 +1,11 @@
 
 // Variables
 //
+$mq-sm: "only screen and (max-width : 1024px)";
+$mq-lg: "only screen and (min-width : 1024px)";
+
 $dark:#222;
 $white:#fff;
 
-$navbar-width:200px;
+$navbar-width:280px;
 $navbar-width-sm:50px;

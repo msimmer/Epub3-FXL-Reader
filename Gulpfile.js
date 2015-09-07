@@ -11,6 +11,7 @@ var autoprefixer = require("gulp-autoprefixer");
 var sass = require("gulp-ruby-sass");
 var livereload = require("gulp-livereload");
 var connect = require("gulp-connect");
+var postcss = require("gulp-postcss");
 
 // JSHint config, adjusted for Coffeescript-compiled JS
 var packageJSON = require("./package");
@@ -63,7 +64,17 @@ gulp.task("sass", function() {
       sourcemap: false,
       style: "expanded"
     })
-    .pipe(autoprefixer("last 2 versions"))
+    .pipe(autoprefixer({
+      browsers: [
+        "last 2 version",
+        "safari 5",
+        "ie 8",
+        "ie 9",
+        "opera 12.1",
+        "ios 6",
+        "android 4"
+      ]
+    }))
     .pipe(gulp.dest("src/css"));
 });
 

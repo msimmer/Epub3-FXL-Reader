@@ -36,7 +36,6 @@ class Reader.Layout extends Reader
     $backgrounds.append($background)
     Reader::updatenodeCount($spread.find('*').length, n, len)
 
-
   prevSectionsExits:(idx) =>
     do =>
       for i in [0..idx - 1]
@@ -73,7 +72,7 @@ class Reader.Layout extends Reader
             laying out section #{index}."
 
           $spread = @generateArticle(index, item.props, index, item.content)
-          @appendToDom($spread, index, item.content)
+          @appendToDom($spread, index, len)
 
           delete @pageQueue[index]
           Reader::log "      Deleting @pageCollection[#{index}] from queue."

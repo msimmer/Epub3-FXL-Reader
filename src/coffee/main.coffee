@@ -17,6 +17,8 @@ class Reader
     $('#nav-toggle').toggleClass('nav-open')
     $('#nav-bar').toggleClass('nav-open')
     $(@settings.outerContainer).toggleClass('nav-open')
+    $('#chapter-list').removeClass('open')
+
 
   fsToggle: =>
     elem = @settings.docElem or document.documentElement
@@ -61,7 +63,6 @@ class Reader
         x:0
         y:0
 
-
     @settings = $.extend({}, defaults, options)
     @utils    = new Reader.Utils
     @parser   = new Reader.Parser
@@ -69,7 +70,6 @@ class Reader
     @aspect   = new Reader.Aspect(@settings)
     @layout   = new Reader.Layout(@settings)
     @navigate = new Reader.Navigate(@settings)
-    @navbar   = new Reader.Navbar(@settings)
 
     @isResizing   = false
     @isPositioned = false
@@ -93,10 +93,7 @@ class Reader
 
       @navigate.setIncrement(data.inc)
       @navigate.setTotalLen(data.len)
-      @navigate.setCurrentPos(0)
       @navigate.setCurrentIdx(0)
-
-      @navbar.append()
     )
 
     # Bootstrap
@@ -149,4 +146,20 @@ class Reader
       e.preventDefault()
       @fsToggle()
       @navToggle()
+
+    $('#click-nav a').on 'click', (e) =>
+      e.preventDefault()
+      $this = $(e.target)
+      if $this.hasClass('prev') then @navigate.goToPrev()
+      else if $this.hasClass('next') then @navigate.goToNext()
+
+    $('.go-to-pos').on 'click', (e) =>
+      e.preventDefault()
+      @navToggle()
+      @navigate.goToIdx($(e.currentTarget).attr('data-nav-pos'))
+
+    $('#chapter-display').on 'click', (e) ->
+      e.preventDefault()
+      $('#chapter-list').toggleClass('open')
+
 

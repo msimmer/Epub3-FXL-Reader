@@ -7,4 +7,5 @@ OEBPS/css/
 OEBPS/font/
 OEBPS/image/
 OEBPS/*.xhtml
+OEBPS/bgs/
 .sass-cache/

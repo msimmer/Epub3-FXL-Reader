@@ -97,8 +97,6 @@ class Reader.Aspect
     pageWidth  = @getScale().fit * @originalX() + @settings.gutter
     pageHeight = @getScale().fit * @originalY()
 
-
-
     len = $sections.length - 1
     wx  = @originalX()
     wy  = @originalY()
