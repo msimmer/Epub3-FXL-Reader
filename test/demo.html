@@ -1,40 +1,29 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Demo</title>
-  <style type="text/css">
-    *{
-      margin:0;padding:0;
-    }
-    html,body{
-      height: 100%;
-      width: 100%;
-      border:0;
-      overflow: hidden;
-    }
-    iframe{
-      height: 100%;
-      width: 100%;
-      border:0;
-      overflow: hidden;
-      float: left;
-    }
-  </style>
-</head>
-<body>
-<iframe src="http://localhost:8080/src"></iframe>
-<script type="text/javascript" src="../vendor/js/jquery.js"></script>
-<script type="text/javascript">
-  $(function(){
-    $('iframe').each(function(){
-      $(this).on('load', function(){
-        new this.contentWindow.reader({
-          docElem: this,
-          contentUrl: '/OEBPS/content.opf'
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0">
+    <link rel="stylesheet" type="text/css" href="css/demo.styles.css">
+    <title>Epub3 FXL Reader — Demo</title>
+  </head>
+  <body>
+
+    <iframe
+      src="http://localhost:8080/src/template.html"
+      data-content-url="/OEBPS/content.opf"></iframe>
+
+    <script type="text/javascript" src="../vendor/js/jquery.js"></script>
+    <script type="text/javascript">
+      $(function(){
+        $('iframe').each(function(){
+          $(this).on('load', function(){
+            new this.contentWindow.reader({
+              docElem: this,
+              contentUrl: $(this).attr('data-content-url')
+            });
+          });
         });
       });
-    });
-  })
-</script>
-</body>
+    </script>
+  </body>
 </html>

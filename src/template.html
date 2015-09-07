@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,user-scalable=0">
+    <link rel="stylesheet" href="fonts/font-awesome-4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <title>Epub3 FXL Reader</title>
+  </head>
+  <body>
+    <nav id="nav-bar">
+      <div id="nav-toggle">
+        <div class="angle"></div>
+        <a class="open-close" href="#">
+        <i class="fa fa-bars hide-on-open white"></i>
+        <i class="fa fa-times hide-on-close"></i>
+        </a>
+      </div>
+      <ul>
+        <li>
+          <a href="#">
+          <span class="nav-icon"><i class="fa fa-home"></i></span>
+          <span class="mq-lg">Home</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+          <span class="nav-icon"><i class="fa fa-list"></i></span>
+          <span class="mq-lg">Contents</span>
+          </a>
+        </li>
+        <li>
+          <a class="fs" href="#">
+          <span class="nav-icon"><i class="fa fa-arrows-alt"></i></span>
+          <span class="mq-lg">Fullscreen</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <main role="main">
+    <section id="content"></section>
+  </main>
+  <script type="text/javascript" src="main.js"></script>
+  <script type="text/javascript">
+        window.reader = Reader;
+  </script>
+</body>
+</html>
