@@ -1,3 +1,11 @@
+// Variables
+//
+$dark:#222;
+$white:#fff;
+
+
+// Base
+//
 html, body {
   overflow: hidden;
   text-rendering: optimizeLegibility;
@@ -13,7 +21,7 @@ html, body {
   top: 0;
   left: 0;
   bottom: 0;
-  background-color: #222;
+  background-color: $dark;
   font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
   margin: 0 0 0 -200px;
   -webkit-transition: margin-left .2s ease-out;
@@ -77,10 +85,10 @@ html, body {
   li {
     margin: 0;
     padding: 0;
-    border-bottom: 1px solid #fff;
+    border-bottom: 1px solid $white;
     a {
       text-decoration: none;
-      color: #fff;
+      color: $white;
       display: block;
       height: 100%;
       width: calc( 100% - 28px);
@@ -90,8 +98,8 @@ html, body {
       -o-transition: color .2s ease-out, background-color .2s ease-out;
       transition: color .2s ease-out, background-color .2s ease-out;
       &:hover {
-        background: #fff;
-        color: #222;
+        background: $white;
+        color: $dark;
       }
     }
   }
@@ -119,7 +127,7 @@ html, body {
 }
 
 main {
-  background-color: #fff;
+  background-color: $white;
   position: fixed;
   top: 0;
   left: 0;
@@ -159,4 +167,3 @@ main {
   -o-transition: -o-transform 0.4s ease-out;
   transition: transform 0.4s ease-out;
 }
-

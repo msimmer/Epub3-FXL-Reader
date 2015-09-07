@@ -34,7 +34,7 @@ gulp.task("coffee", function() {
 // Scripts
 gulp.task("scripts", ["coffee"], function() {
   return gulp.src([
-      "src/vendor/js/jquery.js",
+      "vendor/js/jquery.js",
       "src/js/app.js"
     ])
     .pipe(concat("main.js"))

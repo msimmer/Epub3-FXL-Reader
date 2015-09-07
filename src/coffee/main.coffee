@@ -1,7 +1,8 @@
 
-class window.Reader
+class Reader
 
   @debug = false
+  @fsEnabled = false
 
   log: (args) =>
     if Reader.debug
@@ -11,6 +12,32 @@ class window.Reader
     if currentSection is lastSection
       @log "\nAll sections successfully added to the DOM."
       $(document).trigger('reader.contentReady')
+
+  navToggle: =>
+    $('#nav-toggle').toggleClass('nav-open')
+    $('#nav-bar').toggleClass('nav-open')
+    $(@settings.outerContainer).toggleClass('nav-open')
+
+  fsToggle: =>
+    elem = @settings.docElem or document.documentElement
+    if not @fsEnabled
+      @fsEnabled = true
+      if elem.requestFullscreen
+        elem.requestFullscreen()
+      else if elem.mozRequestFullScreen
+        elem.mozRequestFullScreen()
+      else if elem.webkitRequestFullscreen
+        elem.webkitRequestFullscreen()
+      else if elem.msRequestFullscreen
+        elem.msRequestFullscreen()
+    else
+      @fsEnabled = false
+      if document.exitFullscreen
+        document.exitFullscreen()
+      else if document.mozCancelFullScreen
+        document.mozCancelFullScreen()
+      else if document.webkitExitFullscreen
+        document.webkitExitFullscreen()
 
 
   constructor: (options)->
@@ -29,6 +56,7 @@ class window.Reader
       innerContainer:'#content'
       nativeScroll:false
       lazy:false
+      docElem: null
       origin:
         x:0
         y:0
@@ -76,7 +104,6 @@ class window.Reader
     @layout.render()
 
 
-
     # DOM Events
     #
     $(window).on
@@ -110,10 +137,16 @@ class window.Reader
       switch e.which
         when 39 then @navigate.goToNext()
         when 37 then @navigate.goToPrev()
+        when 27
+          if $(@settings.outerContainer).hasClass('nav-open')
+            @navToggle()
 
-    $('#nav-toggle').on 'click', (e) ->
+    $('#nav-toggle').on 'click', (e) =>
       e.preventDefault()
-      $(@).toggleClass('nav-open')
-      $('#nav-bar').toggleClass('nav-open')
-      $('main').toggleClass('nav-open')
+      @navToggle()
+
+    $('.fs').on 'click', (e) =>
+      e.preventDefault()
+      @fsToggle()
+      @navToggle()
 

@@ -17,11 +17,8 @@
       </div>
       <ul>
         <li><a href="#">Home</a></li>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Home</a></li>
+        <li><a href="#">Contents</a></li>
+        <li><a class="fs" href="#">Fullscreen</a></li>
       </ul>
     </nav>
     <main role="main">
@@ -30,7 +27,7 @@
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript">
     $(function(){
-      var app = new Reader({contentUrl:'/OEBPS/content.opf'});
+      window.reader = new Reader({contentUrl:'/OEBPS/content.opf'});
     });
     </script>
   </body>

@@ -1,7 +1,10 @@
-var bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
+var Reader,
+  bind = function(fn, me){ return function(){ return fn.apply(me, arguments); }; };
 
-window.Reader = (function() {
+Reader = (function() {
   Reader.debug = false;
+
+  Reader.fsEnabled = false;
 
   Reader.prototype.log = function(args) {
     if (Reader.debug) {
@@ -16,7 +19,41 @@ window.Reader = (function() {
     }
   };
 
+  Reader.prototype.navToggle = function() {
+    $('#nav-toggle').toggleClass('nav-open');
+    $('#nav-bar').toggleClass('nav-open');
+    return $(this.settings.outerContainer).toggleClass('nav-open');
+  };
+
+  Reader.prototype.fsToggle = function() {
+    var elem;
+    elem = this.settings.docElem || document.documentElement;
+    if (!this.fsEnabled) {
+      this.fsEnabled = true;
+      if (elem.requestFullscreen) {
+        return elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) {
+        return elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) {
+        return elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) {
+        return elem.msRequestFullscreen();
+      }
+    } else {
+      this.fsEnabled = false;
+      if (document.exitFullscreen) {
+        return document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        return document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        return document.webkitExitFullscreen();
+      }
+    }
+  };
+
   function Reader(options) {
+    this.fsToggle = bind(this.fsToggle, this);
+    this.navToggle = bind(this.navToggle, this);
     this.updatenodeCount = bind(this.updatenodeCount, this);
     this.log = bind(this.log, this);
     var defaults;
@@ -35,6 +72,7 @@ window.Reader = (function() {
       innerContainer: '#content',
       nativeScroll: false,
       lazy: false,
+      docElem: null,
       origin: {
         x: 0,
         y: 0
@@ -108,15 +146,26 @@ window.Reader = (function() {
             return _this.navigate.goToNext();
           case 37:
             return _this.navigate.goToPrev();
+          case 27:
+            if ($(_this.settings.outerContainer).hasClass('nav-open')) {
+              return _this.navToggle();
+            }
         }
       };
     })(this));
-    $('#nav-toggle').on('click', function(e) {
-      e.preventDefault();
-      $(this).toggleClass('nav-open');
-      $('#nav-bar').toggleClass('nav-open');
-      return $('main').toggleClass('nav-open');
-    });
+    $('#nav-toggle').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        return _this.navToggle();
+      };
+    })(this));
+    $('.fs').on('click', (function(_this) {
+      return function(e) {
+        e.preventDefault();
+        _this.fsToggle();
+        return _this.navToggle();
+      };
+    })(this));
   }
 
   return Reader;

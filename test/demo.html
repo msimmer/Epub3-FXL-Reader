@@ -2,8 +2,32 @@
 <html>
 <head>
   <title>Demo</title>
+  <style type="text/css">
+    *{
+      margin:0;padding:0;
+    }
+    html,body{
+      height: 100%;
+      width: 100%;
+      border:0;
+      overflow: hidden;
+    }
+    iframe{
+      height: 50%;
+      width: 50%;
+      border:0;
+      overflow: hidden;
+    }
+  </style>
 </head>
 <body>
-<iframe src="http://localhost:8080" height="300" width="400"></iframe>
+<iframe id="iframe" src="http://localhost:8080/src"></iframe>
+<script type="text/javascript" src="../vendor/js/jquery.js"></script>
+<script type="text/javascript">
+  $('iframe').on('load', function(){
+    var app = this.contentWindow.reader;
+    app.settings.docElem = this;
+  });
+</script>
 </body>
 </html>
