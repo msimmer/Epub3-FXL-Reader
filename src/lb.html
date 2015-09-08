@@ -69,30 +69,30 @@
     <script type="text/javascript" src="main.js"></script>
     <script type="text/javascript" src="../vendor/js/nprogress.js"></script>
     <script type="text/javascript">
-      // new Reader({
-      //   contentUrl: '/OEBPS-1/content.opf',
-      //   viewport:{
-      //     width:567,
-      //     height:776
-      //   }
-      // });
+      new Reader({
+        contentUrl: '/OEBPS/content.opf',
+        viewport:{
+          width:468,
+          height:680
+        }
+      });
 
-      // NProgress.configure({
-      //   minimum: 0.2
-      // });
-      // NProgress.start();
-      // $(document).on('reader.contentReady', function(){
-      //   NProgress.set(0.6);
-      // });
-      // $(document).on('reader.pagesFit', function(){
-      //   NProgress.set(0.8);
-      // });
-      // $(document).on('reader.articlesPositioned', function(){
-      //   var t = setTimeout(function(){
-      //     NProgress.done(true);
-      //     NProgress.remove();
-      //   }, 200);
-      // });
+      NProgress.configure({
+        minimum: 0.2
+      });
+      NProgress.start();
+      $(document).on('reader.contentReady', function(){
+        NProgress.set(0.6);
+      });
+      $(document).on('reader.pagesFit', function(){
+        NProgress.set(0.8);
+      });
+      $(document).on('reader.articlesPositioned', function(){
+        var t = setTimeout(function(){
+          NProgress.done(true);
+          NProgress.remove();
+        }, 200);
+      });
     </script>
 
   </body>

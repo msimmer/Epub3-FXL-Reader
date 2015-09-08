@@ -12,11 +12,15 @@ var sass = require("gulp-ruby-sass");
 var livereload = require("gulp-livereload");
 var connect = require("gulp-connect");
 var postcss = require("gulp-postcss");
+var minifyHTML = require("gulp-minify-html");
 
 // JSHint config, adjusted for Coffeescript-compiled JS
 var packageJSON = require("./package");
 var jshintConfig = packageJSON.jshintConfig;
 jshintConfig.lookup = false;
+
+// Environment variable
+var env = "develop";
 
 // Coffeescripts
 gulp.task("coffee", function() {
@@ -43,15 +47,14 @@ gulp.task("scripts", ["coffee"], function() {
 });
 
 // Clean
-gulp.task("clean", require("del").bind(null, [".tmp", "dist"]));
+gulp.task("clean", require("del").bind(null, ["dist"]));
 
 // Copy
-gulp.task("copy", ["clean"], function() {
+gulp.task("copy", ["clean", "sass"], function() {
   return gulp.src([
-      "src/css/**/*.{css}",
+      "src/css/**/*.css",
       "src/fonts/**/*.*",
-      "src/img/**/*.{jpg,png,svg,gif,webp,ico}",
-      "src/index.html"
+      "src/img/**/*.{jpg,png,svg,gif,webp,ico}"
     ], {
       base: "src"
     })
@@ -62,7 +65,7 @@ gulp.task("copy", ["clean"], function() {
 gulp.task("sass", function() {
   sass("src/css/scss/main.scss", {
       sourcemap: false,
-      style: "expanded"
+      style: env === "production" ? "compressed" : "expanded"
     })
     .pipe(autoprefixer({
       browsers: [
@@ -101,28 +104,41 @@ gulp.task('connect', function() {
   });
 });
 
-// Livereload
+// Watch
 gulp.task("watch", ["connect", "sass", "coffee"], function() {
 
-  // Watch for livereoad
   gulp.watch([
     "src/js/**/*.js",
     "src/css/**/*.css",
-    "src/*.html"
+    "src/*.{html,xhtml,htm}"
   ]).on("change", function(file) {
-    console.log("  " + file.path);
+    console.log("  Changed: " + file.path);
     connect.reload()
   })
 
-  // Watch for autoprefix
+  // Watch for SASS
   gulp.watch(["src/css/scss/**/*.scss"], ["sass"]);
 
-  // Watch for JSHint
+  // Watch for JavaScripts
   gulp.watch("src/js/app.js", ["scripts", "jshint"]);
 
-  // Watch for Coffee
+  // Watch for Coffeescripts
   gulp.watch("src/coffee/*.coffee", ["coffee"]);
 
+});
+
+// Setting our env variable, switches minify settings for `build`
+gulp.task("production", function() {
+  return env = "production";
+});
+
+// Minify our HTML, saving precious bytes
+gulp.task("minify-html", function() {
+  return gulp.src("src/*.{html,xhtml,htm}")
+    .pipe(minifyHTML({
+      empty: true
+    }))
+    .pipe(gulp.dest("dist"));
 });
 
 gulp.task("serve", [
@@ -132,18 +148,19 @@ gulp.task("serve", [
   "jshint",
   "connect",
   "watch"
-], function() {
-  //
-});
+], function() {});
 
 gulp.task("build", [
+  "production",
+  "minify-html",
   "clean",
   "sass",
   "coffee",
   "scripts",
   "jshint",
   "uglify",
-  "copy"
+  "copy",
+  "connect"
 ], function() {
   console.log("  Build is finished.");
 });
