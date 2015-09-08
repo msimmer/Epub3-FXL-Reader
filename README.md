@@ -121,6 +121,6 @@ This sofware is released under the MIT license. Read it [here](https://github.co
 
 ## Thanks
 
-This project was made possible by the generous support of the Canada Council for the Arts, and was developed in conjunction with the launch of Lunch Bytes’ anthology, _No Internet, No Art_, which was edited by Melanie Bühler, and published by Onomatopee, 2015.
+This project was made possible by the generous support of the Canada Council for the Arts, and was developed in conjunction with the launch of Lunch Bytes’ anthology, _No Internet, No Art_ at Art Metropole in Toronto, Canada. _No Internet, No Art_ was edited by Melanie Bühler, and published by Onomatopee, 2015.
 
 <img width="250" alt="Canada Council for the Arts" src="http://maxwellsimmer.com/img/CCFA_RGB_colour_e.jpg">
