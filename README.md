@@ -107,9 +107,10 @@ $(document).on('reader.pagesFit', function(){
 
 $(document).on('reader.articlesPositioned', function(){
   // Reader is ready to roll. Tie it into some custom business ...
-  var mem = localStorage.getItem(epub3Reader) !== null ? JSON.parse(mem) : null;
-  if (mem !== null && typeof mem.lastPos !== 'undefined') {
-    reader.navigate.goToIdx(mem.lastPos);
+  var memStore = localStorage.getItem('epub3Reader');
+  var lastPos = memStore !== null ? JSON.parse(memStore).lastPos : null;
+  if (lastPos != null) {
+    reader.navigate.goToIdx(lastPos);
   }
 });
 ```
