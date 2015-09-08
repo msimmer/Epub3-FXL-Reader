@@ -7,7 +7,7 @@ A browser-based Epub 3.0 reader.
 Clone the repo and install dependencices with
 
 ```
-npm install
+$ npm install
 ```
 
 ## Development
@@ -29,7 +29,7 @@ new Reader({
 To view, run
 
 ```
-gulp serve
+$ gulp serve
 ```
 
 and navigate to `http://localhost:8080`.
@@ -37,7 +37,7 @@ and navigate to `http://localhost:8080`.
 ## Deployment
 
 ```
-gulp build
+$ gulp build
 ```
 
 Thanks Gulp!
