@@ -4,7 +4,7 @@ A browser-based Epub 3.0 reader.
 
 ## Installation
 
-Clone the repo and install dependencices with
+Clone the repo and install dependencies with
 
 ```
 $ npm install
